@@ -1,0 +1,9 @@
+---
+- name: enable ssh
+  copy:
+    content: ""
+    dest: "{{mount_point}}/boot/ssh"
+    force: no
+    # group: sys
+    # owner: root
+    mode: 0755
