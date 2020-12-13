@@ -3,3 +3,4 @@
   hosts: localhost
   roles:
     - role: sshable
+      mount_point: /tmp/mount

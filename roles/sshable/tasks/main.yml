@@ -1,9 +1,16 @@
 ---
 - name: enable ssh
   copy:
-    content: ""
-    dest: "{{mount_point}}/boot/ssh"
+    content: ''
+    dest: '{{mount_point}}/boot/ssh'
     force: no
     # group: sys
     # owner: root
     mode: 0755
+
+- name: copy over ssh public keys
+  authorized_key:
+    key: '{{item}}'
+    path: '{{mount_point}}/home/pi/.ssh/authorized_keys'
+    user: tlhowe
+  with_list: '{{ssh_public_keys}}'
