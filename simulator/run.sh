@@ -3,7 +3,7 @@ qemu-system-arm -kernel ./${RPI_KERNEL} \
 -cpu arm1176 -m 256 \
 -M versatilepb -no-reboot -serial stdio \
 -append "root=/dev/sda2 panic=1 rootfstype=ext4 rw init=/bin/bash" \
--hda ./${RPI_IMG_NAME}.img
+-drive "file=./${RPI_IMG_NAME}.img,index=0,media=disk,format=raw"
 
 sed -i -e 's/^/#/' /etc/ld.so.conf
 sed -i -e 's/^/#/' /etc/fstab
@@ -13,5 +13,5 @@ qemu-system-arm -kernel ./${RPI_KERNEL} \
 -cpu arm1176 -m 256 \
 -M versatilepb -no-reboot -serial stdio \
 -append "root=/dev/sda2 panic=1 rootfstype=ext4 rw" \
--hda ./${RPI_IMG_NAME}.img \
+-drive "file=./${RPI_IMG_NAME}.img,index=0,media=disk,format=raw"
 -redir tcp:5022::22
