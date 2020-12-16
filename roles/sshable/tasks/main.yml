@@ -4,7 +4,7 @@
     content: ''
     dest: '{{mount_point}}/boot/ssh'
     force: no
-    # group: sys
+    # group: root
     # owner: root
     mode: 0755
 
@@ -12,9 +12,17 @@
   copy:
     src: wpa_supplicant.conf
     dest: '{{mount_point}}/boot/wpa_supplicant.conf'
-    # group: sys
+    # group: root
     # owner: root
     mode: 0600
+
+- name: hostname file
+  copy:
+    content: '{{hostname}}'
+    dest: '{{mount_point}}/etc/hostname'
+    # group: root
+    # owner: root
+    mode: 0644
 
 - name: copy over ssh public keys
   authorized_key:
