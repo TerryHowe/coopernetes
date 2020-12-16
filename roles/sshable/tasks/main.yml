@@ -24,6 +24,12 @@
     # owner: root
     mode: 0644
 
+- name: Update '{{mount_point}}/etc/hosts'
+  replace:
+    path: '{{mount_point}}/etc/hosts'
+    regexp: 'raspberrypi'
+    replace: '{{hostname}}'
+
 - name: copy over ssh public keys
   authorized_key:
     key: '{{item}}'
