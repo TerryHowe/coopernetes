@@ -34,5 +34,5 @@
   authorized_key:
     key: '{{item}}'
     path: '{{mount_point}}/home/pi/.ssh/authorized_keys'
-    user: tlhowe
+    user: pi
   with_list: '{{ssh_public_keys}}'
