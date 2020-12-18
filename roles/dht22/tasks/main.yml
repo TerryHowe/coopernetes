@@ -3,45 +3,75 @@
 #  apt:
 #    name: python3
 #    state: latest
-#  become: yes
+#  become: True
 #
 #- name: apt-get install git
 #  apt:
 #    name: git
 #    state: latest
-#  become: yes
+#  become: True
 #
 #- name: apt-get install python3-pip
 #  apt:
 #    name: python3-pip
 #    state: latest
-#  become: yes
+#  become: True
 
 - name: Update python
   community.general.alternatives:
     name: python
     path: /usr/bin/python2
     priority: 1
-  become: yes
+  become: True
 
 - name: Update python
   community.general.alternatives:
     name: python
     path: /usr/bin/python3
     priority: 2
-  become: yes
+  become: True
 
 - name: apt-get install python-smbus
   apt:
     name: python-smbus
     state: latest
-  become: yes
+  become: True
 
 - name: apt-get install i2c-tools
   apt:
     name: i2c-tools
     state: latest
-  become: yes
+  become: True
 
 - debug:
-  msg: "Update https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c"
+    msg: "Update https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c"
+
+- debug:
+    msg: "AUTOMATE https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c"
+
+- debug:
+    msg: "AUTOMATE https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-spi"
+
+- debug:
+    msg: "Might just need to uncomment dtparam=i2c_arm=on in /boot/config.txt?"
+
+- name: Install RPI.GPIO
+  pip:
+    name: RPI.GPIO
+  become: True
+
+- name: Install adafruit-blinka
+  pip:
+    name: adafruit-blinka
+  become: True
+
+- name: Install adafruit-circuitpython-dht
+  pip:
+    name: adafruit-circuitpython-dht
+  become: True
+
+- name: apt-get install libgpiod2
+  apt:
+    name: libgpiod2
+    state: latest
+  become: True
