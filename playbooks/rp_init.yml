@@ -1,5 +1,5 @@
 ---
-- name: "Initial sSet up for Raspberry Pi"
+- name: "Initialize rpi disk"
   hosts: localhost
   roles:
     - role: sshable
