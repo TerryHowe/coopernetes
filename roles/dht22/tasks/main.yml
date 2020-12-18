@@ -1,0 +1,47 @@
+---
+#- name: apt-get install python3
+#  apt:
+#    name: python3
+#    state: latest
+#  become: yes
+#
+#- name: apt-get install git
+#  apt:
+#    name: git
+#    state: latest
+#  become: yes
+#
+#- name: apt-get install python3-pip
+#  apt:
+#    name: python3-pip
+#    state: latest
+#  become: yes
+
+- name: Update python
+  community.general.alternatives:
+    name: python
+    path: /usr/bin/python2
+    priority: 1
+  become: yes
+
+- name: Update python
+  community.general.alternatives:
+    name: python
+    path: /usr/bin/python3
+    priority: 2
+  become: yes
+
+- name: apt-get install python-smbus
+  apt:
+    name: python-smbus
+    state: latest
+  become: yes
+
+- name: apt-get install i2c-tools
+  apt:
+    name: i2c-tools
+    state: latest
+  become: yes
+
+- debug:
+  msg: "Update https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c"

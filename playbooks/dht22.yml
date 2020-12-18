@@ -1,0 +1,5 @@
+---
+- name: "Pi Zero thermometer"
+  hosts: thermometers
+  roles:
+    - role: dht22
