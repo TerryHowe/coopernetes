@@ -66,9 +66,11 @@ class Dht22(object):
         dht22 = Dht22()
         result = dht22.get_data()
         print(result)
-        t = Timer(30.0, self.collect_data)
+        t = Timer(30.0, Dht22.collect_data)
         t.start() 
 
 
+
+Dht22.collect_data()
 
 app.run(host= '0.0.0.0')
