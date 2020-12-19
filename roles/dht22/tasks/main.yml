@@ -80,4 +80,18 @@
     state: latest
   become: True
 
+- name: Install flask
+  pip:
+    name: flask
+  become: True
+
+- name: Install py-healthcheck
+  pip:
+    name: py-healthcheck
+  become: True
+
+- name: Install psutil
+  pip:
+    name: psutil
+  become: True
 
