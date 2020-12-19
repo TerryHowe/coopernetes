@@ -14,10 +14,11 @@
 </nav>
 <section class="content">
   <header>
-    {% block header %}{% endblock %}
+    <h1>Sensors</h1>
   </header>
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
-  {% block content %}{% endblock %}
+  <ul>
+    {% for sensor in sensors: %}
+      <ul><a href="{{ url_for(sensor.url) }}">{{sensor.name}}</a></ul>
+    {% endfor %}
+  </ul>
 </section>

@@ -17,7 +17,7 @@ def index():
     parameters = {
         "title": get_hostname(),
         "hostname": get_hostname(),
-        "content": "<h1>Blah</h1>",
+        "sensors": [{'name': 'DHT22', 'url': 'dht22'}],
     }
     return render_template('index.html', **parameters)
 
@@ -82,6 +82,13 @@ def webmanifest():
 def style_css():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'style.css', mimetype='text/css')
+
+
+@app.route('/dht22')
+def dht22():
+    result = app.make_response({"readings": 234.0})
+    result.mimetype = 'application/json'
+    return result
 
 
 app.run(host= '0.0.0.0')
