@@ -4,6 +4,7 @@ import os
 import sys
 import time
 import datetime
+import threading
 
 import psutil
 import Adafruit_DHT
@@ -66,7 +67,7 @@ class Dht22(object):
         dht22 = Dht22()
         result = dht22.get_data()
         print(result)
-        t = Timer(30.0, Dht22.collect_data)
+        t = threading.Timer(30.0, Dht22.collect_data)
         t.start() 
 
 
