@@ -47,7 +47,7 @@ class Dht22(object):
     sensor = Adafruit_DHT.DHT22
     pin = 18
 
-    def get_data():
+    def get_data(self):
         try:
             humidity, temperature_c = Adafruit_DHT.read_retry(sensor, pin)
             temperature_f = temperature_c * (9 / 5) + 32
