@@ -7,9 +7,13 @@ from flask import send_from_directory
 from flask import render_template
 
 from pi_health import get_hostname, get_healthcheck, get_environment
+from pi_config import PiConfig
+
+from example_sensor import example_sensor
 
 
 app = Flask(__name__)
+pi_config = PiConfig()
 
 
 @app.route('/')
@@ -17,7 +21,7 @@ def index():
     parameters = {
         "title": get_hostname(),
         "hostname": get_hostname(),
-        "sensors": [{'name': 'DHT22', 'url': 'dht22'}],
+        "sensors": pi_config.get_sensors(),
     }
     return render_template('index.html', **parameters)
 
@@ -84,9 +88,9 @@ def style_css():
                                'style.css', mimetype='text/css')
 
 
-@app.route('/dht22')
-def dht22():
-    result = app.make_response({"readings": 234.0})
+@app.route('/example')
+def example():
+    result = app.make_response(example_sensor.get_data())
     result.mimetype = 'application/json'
     return result
 

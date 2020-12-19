@@ -1,0 +1,4 @@
+---
+sensors:
+  - name: Example
+    url: example
