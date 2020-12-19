@@ -50,7 +50,7 @@ class Dht22(object):
 
     def get_data(self):
         try:
-            humidity, temperature_c = Adafruit_DHT.read_retry(sensor, pin)
+            humidity, temperature_c = Adafruit_DHT.read_retry(self.sensor, self.pin)
             temperature_f = temperature_c * (9 / 5) + 32
             result = '"timestamp": "{}", "temperature": {:.1f}, "humidity": {:.1f}'.format(
                     datetime.datetime.now(),
