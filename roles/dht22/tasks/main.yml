@@ -100,3 +100,23 @@
     name: https://github.com/TerryHowe/coopernetes.git
     dest: /home/pi/coopernetes
     clone: yes
+
+##- name: Make sure dht22 is started
+##  sysvinit:
+##      name: dht22
+##      state: started
+##      enabled: yes
+##
+##- name: Make sure dht22 is started on runlevels 3 and 5
+##  sysvinit:
+##      name: dht22
+##      state: started
+##      enabled: yes
+##      runlevels:
+##        - 3
+##        - 5
+- name: Start pi_server service
+  service:
+    name: pi_server
+    pattern: /home/pi/coopernetes/pi_server.sh
+    state: started
