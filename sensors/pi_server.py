@@ -9,11 +9,12 @@ from flask import render_template
 from pi_health import get_hostname, get_healthcheck, get_environment
 from pi_config import PiConfig
 
-from example_sensor import example_sensor
+from load_sensors import LoadSensors
 
 
 app = Flask(__name__)
 pi_config = PiConfig()
+load_sensors = LoadSensors(pi_config.get_sensors())
 
 
 @app.route('/')
@@ -21,7 +22,7 @@ def index():
     parameters = {
         "title": get_hostname(),
         "hostname": get_hostname(),
-        "sensors": pi_config.get_sensors(),
+        "sensors": load_sensors.get_sensors(),
     }
     return render_template('index.html', **parameters)
 
@@ -90,7 +91,7 @@ def style_css():
 
 @app.route('/example')
 def example():
-    result = app.make_response(example_sensor.get_data())
+    result = app.make_response("bogus")
     result.mimetype = 'application/json'
     return result
 

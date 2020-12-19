@@ -2,3 +2,5 @@
 sensors:
   - name: Example
     url: example
+    module: example_sensor
+    class_name: ExampleSensor
