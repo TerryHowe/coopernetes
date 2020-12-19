@@ -2,14 +2,17 @@
 
 import os
 import sys
+import time
+import datetime
+
 import psutil
+import Adafruit_DHT
 from flask import Flask
 from healthcheck import HealthCheck, EnvironmentDump
 
+
 app = Flask(__name__)
 
-health = HealthCheck()
-envdump = EnvironmentDump()
 
 def pi_health():
     application = os.path.basename(sys.argv[0])
@@ -31,9 +34,42 @@ def pi_health():
         "disk_usage": disk_usage,
     }
 
-health.add_check(pi_health)
 
-# Add a flask route to expose information
+health = HealthCheck()
+envdump = EnvironmentDump()
+health.add_check(pi_health)
 app.add_url_rule("/healthcheck", "healthcheck", view_func=lambda: health.run())
 app.add_url_rule("/environment", "environment", view_func=lambda: envdump.run())
+
+ 
+
+class Dht22(object):
+    sensor = Adafruit_DHT.DHT22
+    pin = 18
+
+    def get_data():
+        try:
+            humidity, temperature_c = Adafruit_DHT.read_retry(sensor, pin)
+            temperature_f = temperature_c * (9 / 5) + 32
+            result = '"timestamp": "{}", "temperature": {:.1f}, "humidity": {:.1f}'.format(
+                    datetime.datetime.now(),
+                    temperature_f,
+                    humidity)
+            return("{" + result + "}")
+        except Exception as e:
+            # import traceback 
+            # traceback.print_exc()
+            return('{"error": "' + str(e) + '"}')
+ 
+    @staticmethod
+    def collect_data():
+        result = self.get_data()
+        print(result)
+        t = Timer(30.0, self.collect_data)
+        t.start() 
+
+
+dht22 = Dht22()
+dht22.collect_data()
+
 app.run()
