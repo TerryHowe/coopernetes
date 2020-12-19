@@ -1,56 +1,28 @@
 #!/usr/bin/env python3
 
 import os
-import sys
-import time
-import datetime
-import threading
 
-import psutil
 from flask import Flask
-from healthcheck import HealthCheck, EnvironmentDump
+from flask import send_from_directory
+
+from pi_health import get_healthcheck, get_environment
 
 
 app = Flask(__name__)
 
 
-def pi_health():
-    application = os.path.basename(sys.argv[0])
-    version = "unknown"
-    if len(sys.argv) > 1:
-        version = sys.argv[1]
-
-    cpu_usage = psutil.cpu_percent(interval=1)
-    memory_usage = psutil.virtual_memory()[2]
-    disk_usage = {}
-    for disk_partition in psutil.disk_partitions():
-        disk = disk_partition[1]
-        disk_usage[disk] = psutil.disk_usage(disk)[3]
-    return True, {
-        "application": application,
-        "version": version,
-        "cpu_usage": cpu_usage,
-        "memory_usage": memory_usage,
-        "disk_usage": disk_usage,
-    }
-
-
-health = HealthCheck()
-envdump = EnvironmentDump()
-health.add_check(pi_health)
-
 @app.route('/healthcheck')
 def healthcheck():
-    return health.run()
+    result = app.make_response(get_healthcheck())
+    result.mimetype = 'application/json'
+    return result
+
 
 @app.route('/environment')
 def environment():
-    return envdump.run()
-
- 
-
-
-from flask import send_from_directory
+    result = app.make_response(get_environment())
+    result.mimetype = 'application/json'
+    return result
 
 
 @app.route('/favicon.ico')
