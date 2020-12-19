@@ -2,6 +2,6 @@
 
 BASEDIR=$(dirname "$0")
 cd ${BASEDIR}
-git pull || true
+git pull 2>/dev/null || true
 VERSION=v$(git describe --tags --long)
 ./dht22_server.py $VERSION
