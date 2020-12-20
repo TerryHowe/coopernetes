@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import datetime
+from datetime import datetime, timezone
 
 
 class BaseSensor(object):
@@ -15,7 +15,8 @@ class BaseSensor(object):
             setattr(self, key, kwargs[key])
 
     def get_timestamp(self):
-        return(str(datetime.datetime.now(tz=datetime.timezone.utc)))
+        return datetime.now(tz=timezone.utc)
+
     def get_data(self):
         return self.sample
 

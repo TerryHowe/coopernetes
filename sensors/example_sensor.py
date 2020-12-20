@@ -13,6 +13,6 @@ class Sensor(BaseSensor):
 
     def read_data(self):
         return {
-            "timestamp": self.get_timestamp(),
-            "data": round(123.456 + random.random(), 1),
+            "timestamp": str(self.get_timestamp()),
+            "data": round(123.456 + (random.random()*10), 1),
         }
