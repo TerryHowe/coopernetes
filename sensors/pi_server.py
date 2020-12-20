@@ -5,6 +5,7 @@ import os
 from flask import Flask
 from flask import send_from_directory
 from flask import render_template
+from flask import request
 
 from pi_health import get_hostname, get_healthcheck, get_environment
 from pi_config import PiConfig
@@ -89,11 +90,14 @@ def style_css():
                                'style.css', mimetype='text/css')
 
 
-@app.route('/example')
-def example():
-    result = app.make_response("bogus")
+def read_sensor():
+    sensor = load_sensors.get_sensor(request.path)
+    result = app.make_response(sensor.get_data())
     result.mimetype = 'application/json'
     return result
+
+for sensor in load_sensors.get_sensors():
+    app.add_url_rule('/' + sensor.path, sensor.path, read_sensor)
 
 
 app.run(host= '0.0.0.0')

@@ -18,7 +18,7 @@
   </header>
   <ul>
     {% for sensor in sensors: %}
-      <ul><a href="{{ url_for(sensor.url) }}">{{sensor.name}}</a></ul>
+      <ul><a href="{{ url_for(sensor.path) }}">{{sensor.description}}</a></ul>
     {% endfor %}
   </ul>
 </section>
