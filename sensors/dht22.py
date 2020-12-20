@@ -21,8 +21,10 @@ class Sensor(BaseSensor):
         try:
             humidity, temperature_c = Adafruit_DHT.read_retry(self.sensor, self.pin)
             if temperature_c is None:
-                last_result_seconds = (self.get_timestamp() - self.timestamp).total_seconds()
+                timestamp = self.get_timestamp()
+                last_result_seconds = (timestamp - self.timestamp).total_seconds()
                 last_result = round((float(last_result_seconds) / 60.0), 1)
+                self.result['timestamp'] = timestamp
                 self.result['last_result'] = last_result
                 return self.result
             if humidity is None:
@@ -31,13 +33,13 @@ class Sensor(BaseSensor):
             temperature_f = temperature_c * (9 / 5) + 32
             self.timestamp = self.get_timestamp()
             self.result = {
-                "timestamp": str(self.timestamp),
-                "temperature": round(temperature_f, 1),
-                "humidity": round(humidity, 1),
-                "last_result": 0.0,
+                'timestamp': str(self.timestamp),
+                'temperature': round(temperature_f, 1),
+                'humidity': round(humidity, 1),
+                'last_result': 0.0,
             }
             return self.result
         except Exception as e:
             import traceback 
             traceback.print_exc()
-            return('{"error": "' + str(e) + '"}')
+            return('{'error': "' + str(e) + '"}')
