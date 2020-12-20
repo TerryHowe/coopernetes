@@ -1,3 +1,4 @@
 flask
 py-healthcheck
 psutil
+Adafruit_DHT
