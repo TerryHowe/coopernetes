@@ -16,8 +16,6 @@ class Sensor(BaseSensor):
     pin = 18
 
     def read_data(self):
-        data = '"timestamp": "{}", "data": 123'.format(datetime.datetime.now())
-        return '{' + data + '}'
         try:
             humidity, temperature_c = Adafruit_DHT.read_retry(self.sensor, self.pin)
             if temperature_c is None:
