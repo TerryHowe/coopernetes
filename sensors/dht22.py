@@ -42,4 +42,4 @@ class Sensor(BaseSensor):
         except Exception as e:
             import traceback 
             traceback.print_exc()
-            return('{'error': "' + str(e) + '"}')
+            return {'error': str(e)}
