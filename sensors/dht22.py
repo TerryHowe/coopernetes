@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import datetime
-
 import Adafruit_DHT
 
 from base_sensor import BaseSensor
@@ -19,16 +17,17 @@ class Sensor(BaseSensor):
         try:
             humidity, temperature_c = Adafruit_DHT.read_retry(self.sensor, self.pin)
             if temperature_c is None:
-                return('{"error": "Error collecting data"}')
+                return({"error": "Error collecting data"})
             if humidity is None:
                 humidity = 0.0
 
             temperature_f = temperature_c * (9 / 5) + 32
-            result = '"timestamp": "{}", "temperature": {:.1f}, "humidity": {:.1f}'.format(
-                    datetime.datetime.now(),
-                    temperature_f,
-                    humidity)
-            return("{" + result + "}")
+            result = {
+                "timestamp": self.get_timestamp(),
+                "temperature": round(temperature_f, 1),
+                "humidity": round(humidity, 1),
+            }
+            return result
         except Exception as e:
             import traceback 
             traceback.print_exc()

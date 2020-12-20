@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import json
 import threading
 
 from base_sensor import BaseSensor
@@ -16,6 +17,7 @@ class LoadSensors(object):
             sensor_instance = sensor_class()
             LoadSensors.collect_data(sensor_instance)
             self.sensors.append(sensor_instance)
+            print('Enabled sensor: {}'.format(sensor_instance.description))
 
     def get_sensor(self, path):
         for sensor in self.get_sensors():
@@ -29,8 +31,9 @@ class LoadSensors(object):
 
     @staticmethod
     def collect_data(sensor):
-        sensor.set_data(sensor.read_data())
-        print(sensor.get_data())
+        json_str = json.dumps(sensor.read_data())
+        sensor.set_data(json_str)
+        print(json_str)
         t = threading.Timer(sensor.sample_rate,
                             LoadSensors.collect_data, (sensor,))
         t.start()

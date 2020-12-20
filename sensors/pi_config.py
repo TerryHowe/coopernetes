@@ -21,5 +21,4 @@ class PiConfig(object):
         self.config = {}
 
     def get_sensors(self):
-        print(self.config.get('sensors', []))
         return self.config.get('sensors', [])

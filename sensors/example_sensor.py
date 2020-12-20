@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import datetime
+import random
 
 from base_sensor import BaseSensor
 
@@ -12,5 +12,7 @@ class Sensor(BaseSensor):
     sample_rate = 10
 
     def read_data(self):
-        data = '"timestamp": "{}", "data": 123'.format(datetime.datetime.now())
-        return '{' + data + '}'
+        return {
+            "timestamp": self.get_timestamp(),
+            "data": round(123.456 + random.random(), 1),
+        }
