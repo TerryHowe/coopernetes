@@ -34,7 +34,7 @@ class Sensor(BaseSensor):
                 "timestamp": str(self.timestamp),
                 "temperature": round(temperature_f, 1),
                 "humidity": round(humidity, 1),
-                "last_result": 0,
+                "last_result": 0.0,
             }
             return self.result
         except Exception as e:
