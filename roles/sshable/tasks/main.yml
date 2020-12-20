@@ -4,31 +4,17 @@
     content: ''
     dest: '{{mount_point}}/boot/ssh'
     force: no
-    # group: root
-    # owner: root
+    group: root
+    owner: root
     mode: 0755
 
 - name: wifi credentials
   copy:
     src: wpa_supplicant.conf
     dest: '{{mount_point}}/boot/wpa_supplicant.conf'
-    # group: root
-    # owner: root
+    group: root
+    owner: root
     mode: 0600
-
-- name: hostname file
-  copy:
-    content: '{{hostname}}'
-    dest: '{{mount_point}}/etc/hostname'
-    # group: root
-    # owner: root
-    mode: 0644
-
-- name: Update '{{mount_point}}/etc/hosts'
-  replace:
-    path: '{{mount_point}}/etc/hosts'
-    regexp: 'raspberrypi'
-    replace: '{{hostname}}'
 
 - name: copy over ssh public keys
   authorized_key:

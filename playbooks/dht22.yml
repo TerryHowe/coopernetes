@@ -2,8 +2,8 @@
 - name: "Pi Zero thermometer"
   hosts: thermometers
   roles:
-    #- role: pi_init
-    #- role: python3
+    - role: pi_init
+    - role: python3
     - role: gpio
-    #- role: pi_server
-    #  sensor_module: dht22
+    - role: pi_server
+      sensor_module: dht22

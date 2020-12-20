@@ -1,0 +1,35 @@
+---
+- name: apt-get install python-smbus
+  apt:
+    name: python-smbus
+    state: latest
+  become: True
+
+- name: apt-get install i2c-tools
+  apt:
+    name: i2c-tools
+    state: latest
+  become: True
+
+- debug:
+    msg: "Update https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c"
+
+- debug:
+    msg: "AUTOMATE https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c"
+
+- debug:
+    msg: "AUTOMATE https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-spi"
+
+- debug:
+    msg: "Might just need to uncomment dtparam=i2c_arm=on in /boot/config.txt?"
+
+- name: Install RPI.GPIO
+  pip:
+    name: RPI.GPIO
+  become: True
+
+- name: apt-get install libgpiod2
+  apt:
+    name: libgpiod2
+    state: latest
+  become: True

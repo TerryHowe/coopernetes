@@ -10,3 +10,17 @@
     name: git
     state: latest
   become: True
+
+- name: hostname file
+  copy:
+    content: '{{hostname}}'
+    dest: '{{mount_point}}/etc/hostname'
+    # group: root
+    # owner: root
+    mode: 0644
+
+- name: Update '{{mount_point}}/etc/hosts'
+  replace:
+    path: '{{mount_point}}/etc/hosts'
+    regexp: 'raspberrypi'
+    replace: '{{hostname}}'
