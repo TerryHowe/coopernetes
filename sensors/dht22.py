@@ -21,7 +21,8 @@ class Sensor(BaseSensor):
         try:
             humidity, temperature_c = Adafruit_DHT.read_retry(self.sensor, self.pin)
             if temperature_c is None:
-                last_result = (self.get_timestamp() - self.timestamp).total_seconds()
+                last_result_seconds = (self.get_timestamp() - self.timestamp).total_seconds()
+                last_result = round((float(last_result_seconds) / 60.0), 1)
                 self.result['last_result'] = last_result
                 return self.result
             if humidity is None:
