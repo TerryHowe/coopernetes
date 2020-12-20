@@ -14,13 +14,15 @@
 - name: hostname file
   copy:
     content: '{{hostname}}'
-    dest: '{{mount_point}}/etc/hostname'
-    # group: root
-    # owner: root
+    dest: '/etc/hostname'
+    group: root
+    owner: root
     mode: 0644
+  become: True
 
-- name: Update '{{mount_point}}/etc/hosts'
+- name: Update '/etc/hosts'
   replace:
-    path: '{{mount_point}}/etc/hosts'
-    regexp: 'raspberrypi'
-    replace: '{{hostname}}'
+    path: '/etc/hosts'
+    regexp: '127.0.1.1	.*'
+    replace: '127.0.1.1	{{hostname}}'
+  become: True
