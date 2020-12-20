@@ -4,3 +4,9 @@
     update_cache: yes
     upgrade: dist
   become: yes
+
+- name: apt-get install git
+  apt:
+    name: git
+    state: latest
+  become: True

@@ -1,0 +1,31 @@
+---
+- name: apt-get install python3
+  apt:
+    name: python3
+    state: latest
+  become: True
+
+- name: apt-get install python3-pip
+  apt:
+    name: python3-pip
+    state: latest
+  become: True
+
+- name: Update python
+  community.general.alternatives:
+    name: python
+    path: /usr/bin/python2
+    priority: 1
+  become: True
+
+- name: Update python
+  community.general.alternatives:
+    name: python
+    path: /usr/bin/python3
+    priority: 2
+  become: True
+
+- name: Upgrade pip
+  pip:
+    name: pip
+  become: True
