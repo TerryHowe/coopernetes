@@ -24,7 +24,7 @@ class Sensor(BaseSensor):
                 timestamp = self.get_timestamp()
                 last_result_seconds = (timestamp - self.timestamp).total_seconds()
                 last_result = round((float(last_result_seconds) / 60.0), 1)
-                self.result['timestamp'] = timestamp
+                self.result['timestamp'] = str(timestamp)
                 self.result['last_result'] = last_result
                 return self.result
             if humidity is None:
