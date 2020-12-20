@@ -4,6 +4,7 @@
 class BaseSensor(object):
     description = "BaseSensor"
     path = "sensor"
+    image = "example_png"
     sample = '{"error": "No data collected yet"}'
     sample_rate = 10
 

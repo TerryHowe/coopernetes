@@ -1,14 +1,23 @@
 #!/usr/bin/env python3
 
+import datetime
+
 import Adafruit_DHT
- 
 
-class Dht22(object):
+from base_sensor import BaseSensor
 
+
+class Sensor(BaseSensor):
+    description = "DHT22 Sensor"
+    path = "dht22"
+    image = "dht22_png"
+    sample_rate = 30
     sensor = Adafruit_DHT.DHT22
     pin = 18
 
-    def get_data(self):
+    def read_data(self):
+        data = '"timestamp": "{}", "data": 123'.format(datetime.datetime.now())
+        return '{' + data + '}'
         try:
             humidity, temperature_c = Adafruit_DHT.read_retry(self.sensor, self.pin)
             if temperature_c is None:
@@ -23,20 +32,6 @@ class Dht22(object):
                     humidity)
             return("{" + result + "}")
         except Exception as e:
-            # import traceback 
-            # traceback.print_exc()
+            import traceback 
+            traceback.print_exc()
             return('{"error": "' + str(e) + '"}')
- 
-    @staticmethod
-    def collect_data():
-        dht22 = Dht22()
-        result = dht22.get_data()
-        print(result)
-        t = threading.Timer(30.0, Dht22.collect_data)
-        t.start() 
-
-# Dht22.collect_data()
-# @app.route('/environment')
-# def environment():
-#     return envdump.run()
-
