@@ -72,6 +72,12 @@ def favicon_32x32():
                                'favicon-32x32.png', mimetype='image/png')
 
 
+@app.route('/example.png')
+def example_png():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'example.png', mimetype='image/png')
+
+
 @app.route('/favicon-16x16.png')
 def favicon_16x16():
     return send_from_directory(os.path.join(app.root_path, 'static'),
