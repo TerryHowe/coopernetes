@@ -2,4 +2,7 @@
 - name: "Pi Zero thermometer"
   hosts: thermometers
   roles:
-    - role: dht22
+    #- role: aptget
+    #- role: python3
+    - role: pi_server
+      sensor_module: dht22

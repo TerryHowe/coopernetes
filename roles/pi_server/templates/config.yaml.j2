@@ -1,0 +1,5 @@
+---
+sensors:
+{% for module in sensor_modules %}
+  - module: {{ module }}
+{% endfor %}

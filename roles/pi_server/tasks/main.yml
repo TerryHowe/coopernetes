@@ -1,0 +1,34 @@
+---
+- name: git clone coopernetes
+  git:
+    name: https://github.com/TerryHowe/coopernetes.git
+    dest: /home/pi/coopernetes
+    clone: yes
+
+- name: Install pi_server requirements
+  pip:
+    requirements: /home/pi/coopernetes/sensors/requirements.txt
+  become: True
+
+- name: Create pi_server config.yaml
+  template:
+    src: config.yaml.j2
+    dest: /home/pi/coopernetes/sensors/config.yaml
+    owner: pi
+    group: pi
+    mode: '0644'
+
+- name: Create pi_server systemd configuration
+  become: True
+  template:
+    src: pi_server.service.j2
+    dest: /etc/systemd/system/pi_server.service
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Start service pi_service
+  become: True
+  service:
+    name: pi_server
+    state: started

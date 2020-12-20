@@ -1,0 +1,14 @@
+[Unit]
+Description=Pi Sensor Server
+After=network.target
+
+[Service]
+ExecStart=/bin/bash /home/pi/coopernetes/sensors/run_server.sh
+WorkingDirectory=/home/pi/coopernetes/sensors/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
