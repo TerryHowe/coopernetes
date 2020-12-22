@@ -33,7 +33,6 @@ class LoadSensors(object):
     def collect_data(sensor):
         json_str = json.dumps(sensor.read_data())
         sensor.set_data(json_str)
-        print(json_str)
         t = threading.Timer(sensor.sample_rate,
                             LoadSensors.collect_data, (sensor,))
         t.start()
