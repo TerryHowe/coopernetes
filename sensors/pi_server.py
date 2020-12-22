@@ -6,6 +6,8 @@ from flask import Flask
 from flask import send_from_directory
 from flask import render_template
 from flask import request
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from prometheus_client import make_wsgi_app
 
 from pi_health import get_hostname, get_healthcheck, get_environment
 from pi_config import PiConfig
@@ -112,4 +114,7 @@ for sensor in load_sensors.get_sensors():
     app.add_url_rule('/' + sensor.path, sensor.path, read_sensor)
 
 
-app.run(host= '0.0.0.0')
+# Add prometheus wsgi middleware to route /metrics requests
+app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
+    '/metrics': make_wsgi_app()
+})

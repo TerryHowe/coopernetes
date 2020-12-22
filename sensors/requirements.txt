@@ -2,3 +2,5 @@ flask
 py-healthcheck
 psutil
 Adafruit_DHT
+prometheus_client
+uwsgi
