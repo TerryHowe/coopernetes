@@ -3,6 +3,7 @@
 from datetime import datetime, timezone
 
 import Adafruit_DHT
+from prometheus_client import Gauge
 
 from base_sensor import BaseSensor
 
@@ -16,6 +17,9 @@ class Sensor(BaseSensor):
     pin = 18
     timestamp = datetime.now(tz=timezone.utc)
     result = {'error': 'No data collected yet'}
+    temperature = Gauge('coopernetes_dht22_temperature', 'Temperature')
+    humidity = Gauge('coopernetes_dht22_humidity', 'Humidity Percent')
+    last_result = Gauge('coopernetes_dht22_last_result', 'Last successful read')
 
     def read_data(self):
         try:
@@ -26,16 +30,21 @@ class Sensor(BaseSensor):
                 last_result = round((float(last_result_seconds) / 60.0), 1)
                 self.result['timestamp'] = str(timestamp)
                 self.result['last_result'] = last_result
+                self.last_result.set(last_result)
                 return self.result
             if humidity is None:
                 humidity = 0.0
 
-            temperature_f = temperature_c * (9 / 5) + 32
+            temperature_f = round((temperature_c * (9 / 5) + 32), 1)
+            humidity = round(humidity, 1)
+            self.temperature.set(temperature_f)
+            self.humidity.set(humidity)
             self.timestamp = self.get_timestamp()
+            self.last_result.set(0.0)
             self.result = {
                 'timestamp': str(self.timestamp),
-                'temperature': round(temperature_f, 1),
-                'humidity': round(humidity, 1),
+                'temperature': temperature_f,
+                'humidity': humidity,
                 'last_result': 0.0,
             }
             return self.result
