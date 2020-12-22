@@ -1,0 +1,6 @@
+---
+- name: "Pi Zero thermometer"
+  hosts: thermometers
+  roles:
+    - role: pi_server
+      sensor_module: dht22
