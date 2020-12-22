@@ -4,6 +4,7 @@
     name: https://github.com/TerryHowe/coopernetes.git
     dest: /home/pi/coopernetes
     clone: yes
+  register: git_coopernetes
 
 - name: Install pi_server requirements
   pip:
@@ -32,3 +33,11 @@
   service:
     name: pi_server
     state: started
+  register: service_start
+
+- name: Retart service pi_service if needed
+  become: True
+  service:
+    name: pi_server
+    state: restarted
+  when: service_start.changed==False and git_coopernetes.changed==True
