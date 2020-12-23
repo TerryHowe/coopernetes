@@ -3,4 +3,5 @@ py-healthcheck
 psutil
 Adafruit_DHT
 prometheus_client
+PyYAML
 uwsgi
