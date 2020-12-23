@@ -1,5 +1,0 @@
----
-- name: "Pi Zero thermometer"
-  hosts: all
-  roles:
-    - role: aptget
