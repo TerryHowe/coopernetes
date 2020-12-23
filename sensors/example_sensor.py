@@ -12,12 +12,13 @@ class Sensor(BaseSensor):
     path = "example"
     image = "example_png"
     sample_rate = 10
-    example_data = Gauge('coopernetes_example_data', 'Coopernetes example data')
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        example_data_name = self.hostname + '_example_data'
+        self.example_data = Gauge(example_data_name, 'Coopernetes example data')
 
     def read_data(self):
         value = round(123.456 + (random.random()*10), 1)
         self.example_data.set(value)
-        return {
-            "timestamp": str(self.get_timestamp()),
-            "data": value,
-        }
+        return

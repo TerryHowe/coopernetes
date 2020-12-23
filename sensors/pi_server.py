@@ -104,16 +104,6 @@ def style_css():
                                'style.css', mimetype='text/css')
 
 
-def read_sensor():
-    sensor = load_sensors.get_sensor(request.path)
-    result = app.make_response(sensor.get_data())
-    result.mimetype = 'application/json'
-    return result
-
-for sensor in load_sensors.get_sensors():
-    app.add_url_rule('/' + sensor.path, sensor.path, read_sensor)
-
-
 # Add prometheus wsgi middleware to route /metrics requests
 app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
     '/metrics': make_wsgi_app()
