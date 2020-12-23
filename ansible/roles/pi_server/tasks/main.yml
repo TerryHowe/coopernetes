@@ -33,6 +33,7 @@
   service:
     name: pi_server
     state: started
+    enabled: yes
   register: service_start
 
 - name: Retart service pi_service if needed

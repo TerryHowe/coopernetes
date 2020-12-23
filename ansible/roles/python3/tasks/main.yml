@@ -12,15 +12,9 @@
   become: True
 
 - name: Update python
-  community.general.alternatives:
+  alternatives:
     name: python
-    path: /usr/bin/python2
-    priority: 1
-  become: True
-
-- name: Update python
-  community.general.alternatives:
-    name: python
+    link: /usr/bin/python
     path: /usr/bin/python3
     priority: 2
   become: True
