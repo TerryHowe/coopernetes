@@ -2,7 +2,7 @@
 - name: "Pi Zero thermometer"
   hosts: thermometers
   roles:
-    - role: pi_init
+    - role: raspinit
     - role: python3
     - role: gpio
     - role: pi_server
