@@ -60,3 +60,30 @@
         delay: 5
         timeout: 300
   when: kernel_args is changed or swapon.stdout != ""
+
+- name: Check that the docker executable exists
+  stat:
+    path: /usr/bin/docker
+  register: docker_executable
+
+- name: Install docker if needed
+  block:
+    # Raspbian must use convenience script for now
+    # https://docs.docker.com/engine/install/debian/
+    - name: Download docker installation script
+      get_url:
+        url: https://get.docker.com
+        dest: /home/pi/get-docker.sh
+        mode: '0755'
+
+    - name: Run docker install
+      command: /home/pi/get-docker.sh
+      become: yes
+  when: not docker_executable.stat.exists
+
+- name: Add docker group to pi
+  user:
+    name: pi
+    groups: docker
+    append: yes
+  become: yes
