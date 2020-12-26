@@ -10,12 +10,14 @@
     regexp: '^(.+)$'
     replace: '\1 {{kernel_args}}'
   become: yes
+  register: kernel_args
   when: cmdline_grep.stdout == "0"
 
-- name: Turn swap off
+- name: Check swap settings
   command: swapon --show
   become: yes
   register: swapon
+  changed_when: False
 
 - name: Turn off swap if needed
   block:
@@ -44,3 +46,16 @@
       become: yes
   when: swapon.stdout != ""
 
+
+- name: Reboot if needed
+  block:
+    - name: Reboot
+      reboot:
+
+    - name: Wait for the reboot to complete
+      wait_for_connection:
+        connect_timeout: 20
+        sleep: 5
+        delay: 5
+        timeout: 300
+  when: kernel_args is changed or swapon.stdout != ""
