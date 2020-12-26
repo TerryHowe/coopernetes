@@ -1,0 +1,46 @@
+---
+- name: Check for kernel args
+  shell: cat /boot/cmdline.txt | grep -c '{{kernel_args}}' || true
+  register: cmdline_grep
+  changed_when: False
+
+- name: Add /boot/cmdline.txt kernel args
+  replace:
+    path: /boot/cmdline.txt
+    regexp: '^(.+)$'
+    replace: '\1 {{kernel_args}}'
+  become: yes
+  when: cmdline_grep.stdout == "0"
+
+- name: Turn swap off
+  command: swapon --show
+  become: yes
+  register: swapon
+
+- name: Turn off swap if needed
+  block:
+    - name: Turn swap off
+      command: dphys-swapfile swapoff
+      become: yes
+
+    - name: Stop swap service
+      systemd:
+        name: dphys-swapfile
+        state: stopped
+        enabled: no
+      become: yes
+
+    - name: Remove swap file
+      command: dphys-swapfile uninstall
+      args:
+        removes: /var/swap
+      become: yes
+
+    - name: Remove dphys-swapfile
+      apt:
+        name: dphys-swapfile
+        state: absent
+        purge: yes
+      become: yes
+  when: swapon.stdout != ""
+
