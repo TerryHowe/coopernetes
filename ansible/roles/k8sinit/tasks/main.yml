@@ -51,6 +51,7 @@
   block:
     - name: Reboot
       reboot:
+      become: yes
 
     - name: Wait for the reboot to complete
       wait_for_connection:
