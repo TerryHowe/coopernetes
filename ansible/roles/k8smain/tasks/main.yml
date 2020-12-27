@@ -8,4 +8,14 @@
 - name: kubeadm init
   command: kubeadm init --pod-network-cidr=10.244.0.0/16
   become: yes
+  register: kubeadm_init
   when: component_status.rc == 1
+
+- set_fact:
+    join_command: "{{kubeadm_init.stdout | regex_replace('.*(kubeadm join.*)','\\1') | regex_replace('\\\\n', '') | regex_replace('\\\\\\\\ ', '') | regex_replace('  *', ' ') }}"
+
+- name: Save join command
+  delegate_to: localhost
+  copy:
+    content: "{{join_command}}"
+    dest: ../roles/join_command.sh
