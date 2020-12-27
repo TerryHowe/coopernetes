@@ -1,0 +1,11 @@
+---
+- name: check kubectl get componentstatuses
+  command: kubectl get componentstatuses
+  register: component_status
+  changed_when: False
+  failed_when: False
+
+- name: kubeadm init
+  command: kubeadm init --pod-network-cidr=10.244.0.0/16
+  become: yes
+  when: component_status.rc == 1
