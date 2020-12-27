@@ -3,5 +3,5 @@
   hosts: k8smain
   roles:
     # - role: raspinit
-    - role: k8sinit
+    # - role: k8sinit
     - role: k8sinstall
