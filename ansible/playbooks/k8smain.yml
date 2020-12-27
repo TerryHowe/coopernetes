@@ -4,3 +4,4 @@
   roles:
     # - role: raspinit
     - role: k8sinit
+    - role: k8sinstall
