@@ -1,0 +1,2 @@
+---
+join_file: ../roles/k8sworker/vars/main.yml
