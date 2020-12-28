@@ -7,3 +7,4 @@
     # - role: k8sinstall
     - role: k8smain
     - role: k8spi
+    - role: k8sflannel
