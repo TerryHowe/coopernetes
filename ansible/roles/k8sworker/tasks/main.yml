@@ -1,0 +1,11 @@
+---
+- name: Check admin.conf file exists
+  stat:
+    path: /etc/kubernetes/kubelet.conf
+  register: k8s_conf
+
+- name: kubeadm join
+  command: '{{join_command}}'
+  register: kubeadm_init
+  become: yes
+  when: k8s_conf.stat.exists == False

@@ -2,7 +2,8 @@
 - name: "K8s main server"
   hosts: k8sworker
   roles:
-    - role: raspinit
-    - role: k8sinit
-    - role: k8sinstall
+    # - role: raspinit
+    # - role: k8sinit
+    # - role: k8sinstall
+    - role: k8sworker
     # - role: k8spi
