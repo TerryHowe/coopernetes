@@ -16,7 +16,7 @@
   block:
     - name: Check kube config
       command: diff /etc/kubernetes/admin.conf /home/pi/.kube/config
-      register: kube_config
+      register: diff_config
       become: yes
       changed_when: False
       failed_when: False
@@ -24,14 +24,14 @@
     - name: Copy over the kube config
       command: cp /etc/kubernetes/admin.conf /home/pi/.kube/config
       become: yes
-      when: kube_config != 0
+      when: diff_config.rc != 0
   when: admin_conf.stat.exists
 
 - name: admin.conf does not exist
   block:
     - name: Check kube config
       command: diff /etc/kubernetes/kubelet.conf /home/pi/.kube/config
-      register: kube_config
+      register: diff_config
       become: yes
       changed_when: False
       failed_when: False
@@ -39,7 +39,7 @@
     - name: Copy over the kube config
       command: cp /etc/kubernetes/kubelet.conf /home/pi/.kube/config
       become: yes
-      when: kube_config != 0
+      when: diff_config.rc != 0
   when: admin_conf.stat.exists == False
 
 - name: Set kube config permissions

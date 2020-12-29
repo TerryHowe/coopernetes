@@ -4,8 +4,14 @@
     path: /etc/kubernetes/kubelet.conf
   register: k8s_conf
 
-- name: kubeadm join
-  command: '{{join_command}}'
-  register: kubeadm_init
-  become: yes
+- name: Join block
+  block:
+    - name: Get auth token
+      command: kubeadm token create
+      delegate_to: "{{main_address}}"
+      register: token_create
+
+    - name: kubeadm join
+      command: "kubeadm join {{main_address}}:6443 --token {{token_create.stdout}} --discovery-token-ca-cert-hash {{discovery_token}}"
+      become: yes
   when: k8s_conf.stat.exists == False
