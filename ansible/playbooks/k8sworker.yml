@@ -6,4 +6,4 @@
     # - role: k8sinit
     # - role: k8sinstall
     - role: k8sworker
-    # - role: k8spi
+    - role: k8spi
