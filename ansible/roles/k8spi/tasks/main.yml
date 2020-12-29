@@ -1,12 +1,4 @@
 ---
-- name: Creates kubernetes config directory
-  file:
-    path: /home/pi/.kube
-    owner: pi
-    group: pi
-    mode: 0755
-    state: directory
-
 - name: Check admin.conf
   stat:
     path: /etc/kubernetes/admin.conf
@@ -14,6 +6,14 @@
 
 - name: admin.conf exists
   block:
+    - name: Creates kubernetes config directory
+      file:
+        path: /home/pi/.kube
+        owner: pi
+        group: pi
+        mode: 0755
+        state: directory
+
     - name: Check kube config
       command: diff /etc/kubernetes/admin.conf /home/pi/.kube/config
       register: diff_config
@@ -25,27 +25,44 @@
       command: cp /etc/kubernetes/admin.conf /home/pi/.kube/config
       become: yes
       when: diff_config.rc != 0
+
+    - name: Set kube config permissions
+      file:
+        path: /home/pi/.kube/config
+        owner: pi
+        group: pi
+        mode: 0600
+      become: yes
   when: admin_conf.stat.exists
 
 - name: admin.conf does not exist
   block:
+    - name: Creates kubernetes config directory
+      file:
+        path: /root/.kube
+        owner: root
+        group: root
+        mode: 0755
+        state: directory
+      become: yes
+
     - name: Check kube config
-      command: diff /etc/kubernetes/kubelet.conf /home/pi/.kube/config
+      command: diff /etc/kubernetes/kubelet.conf /root/.kube/config
       register: diff_config
       become: yes
       changed_when: False
       failed_when: False
 
     - name: Copy over the kube config
-      command: cp /etc/kubernetes/kubelet.conf /home/pi/.kube/config
+      command: cp /etc/kubernetes/kubelet.conf /root/.kube/config
       become: yes
       when: diff_config.rc != 0
-  when: admin_conf.stat.exists == False
 
-- name: Set kube config permissions
-  file:
-    path: /home/pi/.kube/config
-    owner: pi
-    group: pi
-    mode: 0600
-  become: yes
+    - name: Set kube config permissions
+      file:
+        path: /root/.kube/config
+        owner: root
+        group: root
+        mode: 0600
+      become: yes
+  when: admin_conf.stat.exists == False
