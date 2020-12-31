@@ -12,8 +12,11 @@ Coopernetes deployment requires Ansible
      echo 'yourpassword' >~/.ansiblevault
      chmod 600 ~/.ansiblevault
      ```
-  
+
   1. Make sure you have an ssh key at `~/.ssh/id_rsa`
+
+  1. Get you purlic ssh key on the targets. There is a role that
+     will do that.
 
   1. Create a Python virtualenv
      ```
@@ -23,7 +26,7 @@ Coopernetes deployment requires Ansible
      virtualenv -p /usr/local/bin/python3 ${WORKON_HOME}/coop
      ```
 
-     Add to your shell rc script:
+  1. Add to your shell rc script:
      ```
      if command -v pyenv 1>/dev/null 2>&1; then
        eval "$(pyenv init -)"
