@@ -5,7 +5,7 @@ on Pi Zeros for sensors and an array of RP4s for monitoring and alarms.
 
 ![DHT22 Sensor](dht_sensor.png)
 
-The [sensor directory](sensor/README.md) contains code that runs on the
+The [sensor directory](sensors/README.md) contains code that runs on the
 Pis for collecting data and putting into a format so it can be gatered
 by Prometheus.
 
