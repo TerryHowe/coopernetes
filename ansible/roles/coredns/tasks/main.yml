@@ -1,0 +1,10 @@
+---
+- name: Check for coredns deployemnt
+  command: kubectl get deploy --namespace kube-system coredns
+  failed_when: False
+  changed_when: False
+  register: flannel
+
+- name: Enable network driver
+  command: kubectl apply -f coredns.yaml
+  when: flannel.rc != 0
