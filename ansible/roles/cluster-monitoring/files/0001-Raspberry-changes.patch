@@ -1,18 +1,13 @@
-From 6f8ff3d0f51774b0394c66d06124cf0d4f13d79b Mon Sep 17 00:00:00 2001
+From 2e8a23171cd03ce407d8b97429b4381b503bd740 Mon Sep 17 00:00:00 2001
 From: Terry Howe <tlhowe@amazon.com>
-Date: Fri, 1 Jan 2021 15:17:23 -0700
-Subject: [PATCH] Raspberry changes
+Date: Fri, 1 Jan 2021 16:45:59 -0700
+Subject: [PATCH] Raspberry Changes
 
 ---
- manifests/armexporter-clusterRole.yaml        |   17 +
- manifests/armexporter-clusterRoleBinding.yaml |   12 +
- manifests/armexporter-daemonset.yaml          |   66 +
- manifests/armexporter-service.yaml            |   15 +
- manifests/armexporter-serviceAccount.yaml     |    5 +
- manifests/armexporter-serviceMonitor.yaml     |   29 +
  manifests/ingress-alertmanager.yaml           |    4 +-
  manifests/ingress-grafana.yaml                |    4 +-
  manifests/ingress-prometheus.yaml             |    6 +-
+ manifests/prometheus-prometheus.yaml          |    3 +
  manifests/prometheus-rules.yaml               |  249 +-
  ...0alertmanagerCustomResourceDefinition.yaml | 2910 ++++++++++---
  ...r-0podmonitorCustomResourceDefinition.yaml |  130 +-
@@ -21,194 +16,8 @@ Subject: [PATCH] Raspberry changes
  ...ervicemonitorCustomResourceDefinition.yaml |  243 +-
  ...-0thanosrulerCustomResourceDefinition.yaml | 3028 ++++++++++---
  vars.jsonnet                                  |    2 +-
- 17 files changed, 8101 insertions(+), 2446 deletions(-)
- create mode 100644 manifests/armexporter-clusterRole.yaml
- create mode 100644 manifests/armexporter-clusterRoleBinding.yaml
- create mode 100644 manifests/armexporter-daemonset.yaml
- create mode 100644 manifests/armexporter-service.yaml
- create mode 100644 manifests/armexporter-serviceAccount.yaml
- create mode 100644 manifests/armexporter-serviceMonitor.yaml
+ 12 files changed, 7960 insertions(+), 2446 deletions(-)
 
-diff --git a/manifests/armexporter-clusterRole.yaml b/manifests/armexporter-clusterRole.yaml
-new file mode 100644
-index 0000000..ab8f48f
---- /dev/null
-+++ b/manifests/armexporter-clusterRole.yaml
-@@ -0,0 +1,17 @@
-+apiVersion: rbac.authorization.k8s.io/v1
-+kind: ClusterRole
-+metadata:
-+  name: arm-exporter
-+rules:
-+- apiGroups:
-+  - authentication.k8s.io
-+  resources:
-+  - tokenreviews
-+  verbs:
-+  - create
-+- apiGroups:
-+  - authorization.k8s.io
-+  resources:
-+  - subjectaccessreviews
-+  verbs:
-+  - create
-diff --git a/manifests/armexporter-clusterRoleBinding.yaml b/manifests/armexporter-clusterRoleBinding.yaml
-new file mode 100644
-index 0000000..0dfb6dc
---- /dev/null
-+++ b/manifests/armexporter-clusterRoleBinding.yaml
-@@ -0,0 +1,12 @@
-+apiVersion: rbac.authorization.k8s.io/v1
-+kind: ClusterRoleBinding
-+metadata:
-+  name: arm-exporter
-+roleRef:
-+  apiGroup: rbac.authorization.k8s.io
-+  kind: ClusterRole
-+  name: arm-exporter
-+subjects:
-+- kind: ServiceAccount
-+  name: arm-exporter
-+  namespace: monitoring
-diff --git a/manifests/armexporter-daemonset.yaml b/manifests/armexporter-daemonset.yaml
-new file mode 100644
-index 0000000..b5befe9
---- /dev/null
-+++ b/manifests/armexporter-daemonset.yaml
-@@ -0,0 +1,66 @@
-+apiVersion: apps/v1
-+kind: DaemonSet
-+metadata:
-+  labels:
-+    k8s-app: arm-exporter
-+  name: arm-exporter
-+  namespace: monitoring
-+spec:
-+  selector:
-+    matchLabels:
-+      k8s-app: arm-exporter
-+  template:
-+    metadata:
-+      labels:
-+        k8s-app: arm-exporter
-+    spec:
-+      affinity:
-+        nodeAffinity:
-+          requiredDuringSchedulingIgnoredDuringExecution:
-+            nodeSelectorTerms:
-+            - matchExpressions:
-+              - key: kubernetes.io/arch
-+                operator: In
-+                values:
-+                - arm
-+                - arm64
-+      containers:
-+      - command:
-+        - /bin/rpi_exporter
-+        - --web.listen-address=127.0.0.1:9243
-+        image: carlosedp/arm_exporter:latest
-+        name: arm-exporter
-+        resources:
-+          limits:
-+            cpu: 100m
-+            memory: 100Mi
-+          requests:
-+            cpu: 50m
-+            memory: 50Mi
-+        securityContext:
-+          privileged: true
-+      - args:
-+        - --secure-listen-address=$(IP):9243
-+        - --upstream=http://127.0.0.1:9243/
-+        - --tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
-+        env:
-+        - name: IP
-+          valueFrom:
-+            fieldRef:
-+              fieldPath: status.podIP
-+        image: carlosedp/kube-rbac-proxy:v0.5.0
-+        name: kube-rbac-proxy
-+        ports:
-+        - containerPort: 9243
-+          hostPort: 9243
-+          name: https
-+        resources:
-+          limits:
-+            cpu: 20m
-+            memory: 40Mi
-+          requests:
-+            cpu: 10m
-+            memory: 20Mi
-+      serviceAccountName: arm-exporter
-+      tolerations:
-+      - operator: Exists
-diff --git a/manifests/armexporter-service.yaml b/manifests/armexporter-service.yaml
-new file mode 100644
-index 0000000..d83042f
---- /dev/null
-+++ b/manifests/armexporter-service.yaml
-@@ -0,0 +1,15 @@
-+apiVersion: v1
-+kind: Service
-+metadata:
-+  labels:
-+    k8s-app: arm-exporter
-+  name: arm-exporter
-+  namespace: monitoring
-+spec:
-+  clusterIP: None
-+  ports:
-+  - name: https
-+    port: 9243
-+    targetPort: https
-+  selector:
-+    k8s-app: arm-exporter
-diff --git a/manifests/armexporter-serviceAccount.yaml b/manifests/armexporter-serviceAccount.yaml
-new file mode 100644
-index 0000000..42e52a0
---- /dev/null
-+++ b/manifests/armexporter-serviceAccount.yaml
-@@ -0,0 +1,5 @@
-+apiVersion: v1
-+kind: ServiceAccount
-+metadata:
-+  name: arm-exporter
-+  namespace: monitoring
-diff --git a/manifests/armexporter-serviceMonitor.yaml b/manifests/armexporter-serviceMonitor.yaml
-new file mode 100644
-index 0000000..8795a0b
---- /dev/null
-+++ b/manifests/armexporter-serviceMonitor.yaml
-@@ -0,0 +1,29 @@
-+apiVersion: monitoring.coreos.com/v1
-+kind: ServiceMonitor
-+metadata:
-+  labels:
-+    app: arm-exporter
-+  name: arm-exporter
-+  namespace: monitoring
-+spec:
-+  endpoints:
-+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-+    interval: 30s
-+    port: https
-+    relabelings:
-+    - action: replace
-+      regex: (.*)
-+      replacement: $1
-+      sourceLabels:
-+      - __meta_kubernetes_pod_node_name
-+      targetLabel: instance
-+    scheme: https
-+    tlsConfig:
-+      insecureSkipVerify: true
-+  jobLabel: arm-exporter-exporter
-+  namespaceSelector:
-+    matchNames:
-+    - monitoring
-+  selector:
-+    matchLabels:
-+      k8s-app: arm-exporter
 diff --git a/manifests/ingress-alertmanager.yaml b/manifests/ingress-alertmanager.yaml
 index f33d7b8..67fd497 100644
 --- a/manifests/ingress-alertmanager.yaml
@@ -268,6 +77,20 @@ index 8609f20..1b77845 100644
    - hosts:
 -    - prometheus.192.168.1.15.nip.io
 +    - prometheus.172.27.27.159.nip.io
+diff --git a/manifests/prometheus-prometheus.yaml b/manifests/prometheus-prometheus.yaml
+index 2280b93..0b697d0 100644
+--- a/manifests/prometheus-prometheus.yaml
++++ b/manifests/prometheus-prometheus.yaml
+@@ -6,6 +6,9 @@ metadata:
+   name: k8s
+   namespace: monitoring
+ spec:
++  additionalScrapeConfigs:
++    name: additional-scrape-configs
++    key: prometheus-additional.yaml
+   affinity:
+     podAntiAffinity:
+       preferredDuringSchedulingIgnoredDuringExecution:
 diff --git a/manifests/prometheus-rules.yaml b/manifests/prometheus-rules.yaml
 index 722a797..141fc8a 100644
 --- a/manifests/prometheus-rules.yaml

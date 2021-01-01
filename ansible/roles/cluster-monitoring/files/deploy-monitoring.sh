@@ -6,7 +6,7 @@ git clone git@github.com:carlosedp/cluster-monitoring.git
 cd cluster-monitoring
 
 # Random SHA1 we have tested
-git checkout bf9342e95c8211ebbda6b357ea0048d5283a1bf2
+git checkout a136833aaf364a8e76809a9dca789bb59e070677
 
 git apply ../roles/cluster-monitoring/files/0001-Raspberry-changes.patch 
 
