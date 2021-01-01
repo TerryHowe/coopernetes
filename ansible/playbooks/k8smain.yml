@@ -6,3 +6,4 @@
     - role: k8spi
     - role: flannel
     - role: coredns
+    - role: ingress-nginx

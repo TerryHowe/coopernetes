@@ -1,10 +1,10 @@
 ---
-- name: Check for flannel daemonset
+- name: Check for daemonset
   command: kubectl get daemonset --namespace kube-system kube-flannel-ds
   failed_when: False
   changed_when: False
-  register: flannel
+  register: daemonset
 
-- name: Enable network driver
+- name: Add daemonset
   command: kubectl apply -f kube-flannel.yml
-  when: flannel.rc != 0
+  when: daemonset.rc != 0
