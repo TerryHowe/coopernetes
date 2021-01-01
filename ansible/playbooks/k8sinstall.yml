@@ -1,0 +1,7 @@
+---
+- name: "Prepare for and install K8s"
+  hosts: k8smain k8sworkers
+  roles:
+    - role: raspinit
+    - role: k8sinit
+    - role: k8sinstall
