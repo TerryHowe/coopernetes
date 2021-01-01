@@ -7,3 +7,4 @@
     - role: flannel
     - role: coredns
     - role: ingress-nginx
+    - role: cluster-monitoring
