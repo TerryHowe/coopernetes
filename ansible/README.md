@@ -1,6 +1,6 @@
-# coopernetes Deployment
+# Coopernetes Deployment
 
-Coopernetes deployment requires Ansible
+Coopernetes deployment uses Ansible to automate deployment
 
 ## Development Setup
 
