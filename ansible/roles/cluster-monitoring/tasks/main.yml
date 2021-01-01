@@ -6,5 +6,7 @@
   register: deployment
 
 - name: Add deployment
-  command: kubectl apply -f nginx-ingress.yaml
+  block:
+  - name: Clone repo
+    command: deploy-monitoring.sh
   when: deployment.rc != 0
