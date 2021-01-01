@@ -1,7 +1,8 @@
 # coopernetes
 
 Coopernetes chicken coop monitoring system. There are applications that run
-on Pi Zeros for sensors and an array of RP4s for monitoring and alarms.
+on Pi Zeros for sensors and an array of RP4s for monitoring and alarms. This
+picture shows what the sensors web server looks like with one DHT22:
 
 ![DHT22 Sensor](dht_sensor.png)
 
