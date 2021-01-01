@@ -6,9 +6,9 @@ picture shows what the sensors web server looks like with one DHT22:
 
 ![DHT22 Sensor](dht_sensor.png)
 
-The [sensor directory](sensors/README.md) contains code that runs on the
+The [sensor directory](sensors/) contains code that runs on the
 Pis for collecting data and putting into a format so it can be gatered
 by Prometheus.
 
-The [ansible directory](ansible/README.md) contains Ansible code to
+The [ansible directory](ansible/) contains Ansible code to
 install all the necessary code to get sensors and Kubernetes running.
