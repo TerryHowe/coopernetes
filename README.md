@@ -4,10 +4,10 @@ Coopernetes is a chicken coop monitoring system using Raspberry Pis and
 Kubernetes. There are applications that run on Pis that collect data
 and a Kubernetes cluster using Pi 4s for monitoring and alarms.
 
-## Sensor
+## Sensors
 
-The [sensor directory](sensors/) contains code that runs on the
-Pis for collecting data and putting into a format so it can be gathered
+The [sensors directory](sensors/) contains code that runs on the
+Pis for collecting data and putting it into a format so it can be gathered
 by Prometheus.
 
 ## DevOps
