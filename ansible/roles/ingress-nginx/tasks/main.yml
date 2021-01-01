@@ -1,0 +1,10 @@
+---
+- name: Check for deployemnt
+  command: kubectl get deploy --namespace ingress-nginx ingress-nginx-controller
+  failed_when: False
+  changed_when: False
+  register: deployment
+
+- name: Add deployment
+  command: kubectl apply -f nginx-ingress.yaml
+  when: deployment.rc != 0
