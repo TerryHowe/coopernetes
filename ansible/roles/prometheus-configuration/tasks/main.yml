@@ -1,0 +1,20 @@
+---
+- name: Check for secret
+  command: kubectl get secret additional-scrape-configs -n monitoring
+  failed_when: False
+  changed_when: False
+  register: get_secret
+
+- name: Make the secret
+  block:
+  - name: Create pi_server config.yaml
+    template:
+      src: prometheus-additional.yaml.j2
+      dest: /home/pi/prometheus-additional.yaml
+      owner: pi
+      group: pi
+      mode: '0644'
+
+  - name: Create secret
+    command: kubectl create secret generic additional-scrape-configs -n monitoring --from-file=prometheus-additional.yaml
+  when: get_secret.rc != 0
