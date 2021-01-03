@@ -2,7 +2,7 @@
 - name: "K8s main server"
   hosts: k8smain
   roles:
-    - role: k8smain
+    - role: kubeadm-init
     - role: k8spi
     - role: flannel
     - role: coredns
