@@ -1,6 +1,8 @@
 # Coopernetes Deployment
 
-Coopernetes deployment uses Ansible to automate deployment
+Coopernetes deployment uses Ansible to automate deployment. Just like chickens,
+our Raspberry Pis should be livestock, not pets. Make deployment to them easy
+so we are not so attached when they get killed by a bear.
 
 ## Development Setup
 
