@@ -9,7 +9,7 @@ bootstrapTokens:
   - authentication
 kind: InitConfiguration
 localAPIEndpoint:
-  advertiseAddress: 1.2.3.4
+  advertiseAddress: 172.27.27.159
   bindPort: 6443
 nodeRegistration:
   criSocket: /var/run/dockershim.sock
@@ -33,7 +33,6 @@ etcd:
     dataDir: /var/lib/etcd
     imageRepository: public.ecr.aws/eks-distro/etcd-io
     imageTag: v3.4.14-eks-1-18-1 
-    extraArgs: -e 'ETCD_UNSUPPORTED_ARCH=arm64'
 imageRepository: public.ecr.aws/eks-distro/kubernetes
 kind: ClusterConfiguration
 kubernetesVersion: v1.18.9-eks-1-18-1
@@ -122,4 +121,3 @@ staticPodPath: /etc/kubernetes/manifests
 streamingConnectionIdleTimeout: 0s
 syncFrequency: 0s
 volumeStatsAggPeriod: 0s
-
