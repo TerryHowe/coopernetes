@@ -5,6 +5,13 @@
   changed_when: False
   register: deployment
 
-- name: Add deployment
-  command: kubectl apply -f nginx-ingress.yaml
+- name: Start the deployment
+  block:
+    - name: Copy over the kube config
+      copy:
+        src: nginx-ingress.yaml
+        dest: /home/pi/nginx-ingress.yaml
+
+    - name: Add deployment
+      command: kubectl apply -f nginx-ingress.yaml
   when: deployment.rc != 0
