@@ -9,11 +9,11 @@ bootstrapTokens:
   - authentication
 kind: InitConfiguration
 localAPIEndpoint:
-  advertiseAddress: 172.27.27.159
+  advertiseAddress: {{ ansible_default_ipv4.address }}
   bindPort: 6443
 nodeRegistration:
   criSocket: /var/run/dockershim.sock
-  name: rpi-159
+  name: {{ hostname }}
   taints:
   - effect: NoSchedule
     key: node-role.kubernetes.io/master
