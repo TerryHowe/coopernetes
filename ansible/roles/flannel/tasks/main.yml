@@ -5,6 +5,13 @@
   changed_when: False
   register: daemonset
 
-- name: Add daemonset
-  command: kubectl apply -f kube-flannel.yml
+- name: Start the daemonset
+  block:
+    - name: Copy over the kube config
+      copy:
+        src: kube-flannel.yml
+        dest: /home/pi/kube-flannel.yml
+
+    - name: Add daemonset
+      command: kubectl apply -f kube-flannel.yml
   when: daemonset.rc != 0
