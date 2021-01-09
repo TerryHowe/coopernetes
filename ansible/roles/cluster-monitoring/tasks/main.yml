@@ -5,8 +5,22 @@
   changed_when: False
   register: deployment
 
-- name: Add deployment
+- name: git clone cluster-monitoring
+  git:
+    name: https://github.com/TerryHowe/cluster-monitoring.git
+    dest: /home/pi/cluster-monitoring
+    clone: yes
+  register: git_carlos
+
+- name: Start the deployment
   block:
-  - name: Clone repo
-    command: deploy-monitoring.sh
+    - name: Make it
+      command: make deploy
+      args:
+        chdir: /home/pi/cluster-monitoring
+
+    - name: Run deployment script
+      command: ./deploy-monitoring.sh
+      args:
+        chdir: /home/pi/cluster-monitoring
   when: deployment.rc != 0
