@@ -8,20 +8,3 @@
   - name: kubeadm init
     command: kubeadm init --pod-network-cidr=10.244.0.0/16
     become: yes
-    register: kubeadm_init
-
-  - block:
-    - set_fact:
-        discovery_token: "{{kubeadm_init.stdout | regex_replace('.*discovery-token-ca-cert-hash (.*) .*','\\1') }}"
-        primary_address: "{{kubeadm_init.stdout | regex_replace('.*kubeadm join (.*):6443 --token.*','\\1') }}"
-
-    - name: Save join command to vars file
-      delegate_to: localhost
-      copy:
-        content: "---\ndiscovery_token: {{discovery_token}}\nprimary_address: {{primary_address}}\n"
-        dest: '{{join_file}}'
-    - name: Encrypt join file
-      delegate_to: localhost
-      shell: ansible-vault encrypt '{{join_file}}'
-    when: kubeadm_init is changed
-  when: k8s_conf.stat.exists == False

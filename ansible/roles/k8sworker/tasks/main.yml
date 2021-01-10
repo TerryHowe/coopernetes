@@ -7,11 +7,11 @@
 - name: Join block
   block:
     - name: Get auth token
-      command: kubeadm token create
+      command: kubeadm token create --print-join-command
       delegate_to: "{{primary_address}}"
-      register: token_create
+      register: join_command
 
     - name: kubeadm join
-      command: "kubeadm join {{primary_address}}:6443 --token {{token_create.stdout}} --discovery-token-ca-cert-hash {{discovery_token}}"
+      command: "{{join_command.stdout}}"
       become: yes
   when: k8s_conf.stat.exists == False
