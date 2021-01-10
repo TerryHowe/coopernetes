@@ -3,4 +3,5 @@
   hosts: k8sworkers
   roles:
     - role: k8sworker
-    - role: k8spi
+    - role: k8s/users/root
+    - role: k8s/users/pi

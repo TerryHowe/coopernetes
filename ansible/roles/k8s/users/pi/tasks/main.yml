@@ -1,0 +1,41 @@
+---
+- name: Creates kubernetes config directory
+  file:
+    path: /home/pi/.kube
+    owner: pi
+    group: pi
+    mode: 0755
+    state: directory
+
+- name: Check admin.conf
+  stat:
+    path: /etc/kubernetes/admin.conf
+  register: admin_conf
+
+- name: admin.conf exists
+  block:
+    - name: Copy over the kube config
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /home/pi/.kube/config
+        remote_src: yes
+      become: yes
+  when: admin_conf.stat.exists
+
+- name: admin.conf does not exist
+  block:
+    - name: Copy over the kube config
+      copy:
+        src: /etc/kubernetes/kubelet.conf
+        dest: /home/pi/.kube/config
+        remote_src: yes
+      become: yes
+  when: admin_conf.stat.exists == False
+
+- name: Set kube config permissions
+  file:
+    path: /home/pi/.kube/config
+    owner: pi
+    group: pi
+    mode: 0600
+  become: yes
