@@ -1,0 +1,9 @@
+---
+- name: "K8s primary server"
+  hosts: k8sprimary
+  roles:
+    - role: kubeadm-init
+    - role: k8spi
+    - role: k8shost
+    - role: flannel
+    - role: ingress-nginx
