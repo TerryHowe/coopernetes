@@ -2,7 +2,7 @@
 - name: "K8s primary server"
   hosts: k8sprimary
   roles:
-    - role: kubeadm-init
+    - role: k8s/primary
     - role: k8s/users/root
     - role: k8s/users/pi
     - role: k8s/users/localhost
