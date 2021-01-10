@@ -3,5 +3,5 @@
   hosts: k8sprimary k8sworkers
   roles:
     - role: raspinit
-    - role: k8sinit
+    - role: k8s/initialize
     - role: k8s/install
