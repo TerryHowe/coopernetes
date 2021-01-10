@@ -5,6 +5,6 @@
     - role: kubeadm-init
     - role: k8s/users/root
     - role: k8s/users/pi
-    - role: k8shost
+    - role: k8s/users/localhost
     - role: flannel
     - role: ingress-nginx
