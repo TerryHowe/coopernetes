@@ -1,0 +1,6 @@
+---
+- name: "Start Prometheus application"
+  hosts: k8sprimary
+  roles:
+    - role: cluster-monitoring
+    - role: prometheus-configuration
