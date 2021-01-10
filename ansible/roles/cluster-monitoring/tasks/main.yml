@@ -23,4 +23,4 @@
       command: ./deploy-monitoring.sh
       args:
         chdir: /home/pi/cluster-monitoring
-  when: deployment.rc != 0
+  when: deployment.rc != 0 or git_carlos.changed
