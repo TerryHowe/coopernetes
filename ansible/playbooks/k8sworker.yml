@@ -1,5 +1,5 @@
 ---
-- name: "K8s main server"
+- name: "K8s workers"
   hosts: k8sworkers
   roles:
     - role: k8sworker
