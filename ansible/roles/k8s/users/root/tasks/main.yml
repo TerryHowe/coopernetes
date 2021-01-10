@@ -40,3 +40,10 @@
     group: root
     mode: 0600
   become: yes
+
+- name: Copy over bashrc
+  copy:
+    src: bashrc
+    dest: /root/.bashrc
+    mode: 0644
+  become: yes

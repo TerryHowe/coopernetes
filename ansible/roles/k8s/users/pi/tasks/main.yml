@@ -39,3 +39,9 @@
     group: pi
     mode: 0600
   become: yes
+
+- name: Copy over bashrc
+  copy:
+    src: bashrc
+    dest: /home/pi/.bashrc
+    mode: 0644
