@@ -6,7 +6,7 @@
 
 - name: Join block
   block:
-    - name: Get auth token
+    - name: Get join command
       command: kubeadm token create --print-join-command
       delegate_to: "{{primary_address}}"
       register: join_command
