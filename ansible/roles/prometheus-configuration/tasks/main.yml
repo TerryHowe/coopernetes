@@ -10,10 +10,8 @@
   - name: Create pi_server config.yaml
     template:
       src: prometheus-additional.yaml.j2
-      dest: /home/pi/prometheus-additional.yaml
-      owner: pi
-      group: pi
-      mode: '0644'
+      dest: prometheus-additional.yaml
+      mode: '0640'
 
   - name: Create secret
     command: kubectl create secret generic additional-scrape-configs -n monitoring --from-file=prometheus-additional.yaml

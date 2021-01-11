@@ -7,20 +7,20 @@
 
 - name: git clone cluster-monitoring
   git:
-    name: https://github.com/TerryHowe/cluster-monitoring.git
-    dest: /home/pi/cluster-monitoring
+    name: git@github.com:TerryHowe/cluster-monitoring.git
+    dest: "{{ lookup('env', 'HOME') }}/cluster-monitoring"
     clone: yes
   register: git_carlos
 
 - name: Start the deployment
   block:
+    - name: Make suffix
+      command: make change_suffix suffix="{{ groups.k8sprimary[0] }}.nip.io"
+      args:
+        chdir: "{{ lookup('env', 'HOME') }}/cluster-monitoring"
+
     - name: Make it
       command: make deploy
       args:
-        chdir: /home/pi/cluster-monitoring
-
-    - name: Run deployment script
-      command: ./deploy-monitoring.sh
-      args:
-        chdir: /home/pi/cluster-monitoring
+        chdir: "{{ lookup('env', 'HOME') }}/cluster-monitoring"
   when: deployment.rc != 0 or git_carlos.changed

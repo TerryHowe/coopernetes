@@ -1,6 +1,9 @@
   - job_name:       'sensors'
     scrape_interval: 30s
     static_configs:
-      - targets: ['172.27.27.128:5000','172.27.27.131:5000']
+      - targets:
+          {% for host in groups['thermometers'] %}
+          - '{{host}}:5000'
+          {% endfor %}
         labels:
           group: 'dht22'
