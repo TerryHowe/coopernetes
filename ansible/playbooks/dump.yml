@@ -1,0 +1,5 @@
+---
+- name: "Dump environment"
+  hosts: localhost
+  roles:
+    - role: dump
