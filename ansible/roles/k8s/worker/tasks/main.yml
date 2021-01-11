@@ -8,7 +8,7 @@
   block:
     - name: Get join command
       command: kubeadm token create --print-join-command
-      delegate_to: "{{primary_address}}"
+      delegate_to: "{{ groups.k8sprimary[0] }}"
       register: join_command
 
     - name: kubeadm join
