@@ -2,6 +2,7 @@
 - name: "K8s workers"
   hosts: k8sworkers
   roles:
-    - role: k8s/worker
-    - role: k8s/users/root
-    - role: k8s/users/pi
+    - role: k8s/configuration
+    #- role: k8s/worker
+    #- role: k8s/users/root
+    #- role: k8s/users/pi

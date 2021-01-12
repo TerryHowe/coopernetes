@@ -5,12 +5,6 @@
   register: k8s_conf
 
 - block:
-  - name: Create config file
-    template:
-      src: kube.yaml.j2
-      dest: /root/kube.yaml
-    become: yes
-
   - name: kubeadm init
     command: kubeadm init --config kube.yaml
     become: yes

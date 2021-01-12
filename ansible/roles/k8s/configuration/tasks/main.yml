@@ -1,0 +1,6 @@
+---
+- name: Create config file
+  template:
+    src: kube.yaml.j2
+    dest: /root/kube.yaml
+  become: yes
