@@ -2,8 +2,8 @@
     scrape_interval: 30s
     static_configs:
       - targets:
-          {% for host in groups['thermometers'] %}
-          - '{{host}}:5000'
-          {% endfor %}
+{% for host in groups['thermometers'] %}
+        - '{{host}}:5000'
+{% endfor %}
         labels:
           group: 'dht22'
