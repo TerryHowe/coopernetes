@@ -12,6 +12,8 @@ The [sensors directory](sensors/) contains code that runs on the
 Pis for collecting data and putting it into a format so it can be gathered
 by Prometheus.
 
+![Sensors](sensors.png)
+
 ## DevOps
 
 The [ansible directory](ansible/) contains Ansible code to install
@@ -19,3 +21,5 @@ all the necessary code to get sensors and Kubernetes running. The
 idea is to make creating new sensors and Kubernetes clusters easy
 so that they can be created and destroyed quickly and with no thought.
 The playbooks and roles should be idempotent.
+
+![Coop](coop.png)
