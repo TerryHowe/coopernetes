@@ -1,6 +1,5 @@
 ---
 - name: "Initialize rpi disk"
-  hosts: localhost
+  hosts: k8sprimary
   roles:
     - role: sshable
-      mount_point: /tmp/mount

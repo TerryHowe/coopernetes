@@ -4,21 +4,27 @@
     content: ''
     dest: '{{mount_point}}/boot/ssh'
     force: no
-    group: root
-    owner: root
     mode: 0755
+  become: yes
 
 - name: wifi credentials
   copy:
     src: wpa_supplicant.conf
     dest: '{{mount_point}}/boot/wpa_supplicant.conf'
-    group: root
-    owner: root
     mode: 0600
+  become: yes
+
+- name: Create ssh directory
+  file:
+    path: '{{mount_point}}/rootfs/home/pi/.ssh'
+    state: directory
+    owner: pi
+    group: pi
+    mode: 0700
 
 - name: copy over ssh public keys
   authorized_key:
     key: '{{item}}'
-    path: '{{mount_point}}/home/pi/.ssh/authorized_keys'
+    path: '{{mount_point}}/rootfs/home/pi/.ssh/authorized_keys'
     user: pi
-  with_list: '{{ssh_public_keys}}'
+  loop: '{{ssh_public_keys}}'
