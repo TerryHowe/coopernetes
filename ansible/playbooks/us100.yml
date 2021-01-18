@@ -1,0 +1,10 @@
+---
+- name: "US-100 Distance Sensor"
+  hosts: food
+  roles:
+    - role: raspinit
+    - role: python3
+    - role: gpio
+    - role: reboot
+    - role: pi_server
+      sensor_module: us100
