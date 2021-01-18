@@ -1,0 +1,8 @@
+---
+- name: Copy over the kube config
+  copy:
+    src: keyboard
+    dest: /etc/default/keyboard
+    owner: root
+    group: root
+    mode: 0644
