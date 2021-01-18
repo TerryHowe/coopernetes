@@ -16,12 +16,14 @@
     path: /boot/config.txt
     regexp: '^#dtparam=i2c_arm=on'
     line: 'dtparam=i2c_arm=on'
+  become: True
 
 - name: Enable spi
   ansible.builtin.lineinfile:
     path: /boot/config.txt
     regexp: '^#dtparam=spi=on'
     line: 'dtparam=spi=on'
+  become: True
 
 - name: Install RPI.GPIO
   pip:
