@@ -11,17 +11,17 @@
     state: latest
   become: True
 
-- debug:
-    msg: "Update https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c"
+- name: Enable i2c
+  ansible.builtin.lineinfile:
+    path: /boot/config.txt
+    regexp: '^#dtparam=i2c_arm=on'
+    line: 'dtparam=i2c_arm=on'
 
-- debug:
-    msg: "AUTOMATE https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c"
-
-- debug:
-    msg: "AUTOMATE https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-spi"
-
-- debug:
-    msg: "Might just need to uncomment dtparam=i2c_arm=on in /boot/config.txt?"
+- name: Enable spi
+  ansible.builtin.lineinfile:
+    path: /boot/config.txt
+    regexp: '^#dtparam=spi=on'
+    line: 'dtparam=spi=on'
 
 - name: Install RPI.GPIO
   pip:
