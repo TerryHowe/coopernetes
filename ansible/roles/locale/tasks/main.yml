@@ -1,0 +1,9 @@
+---
+- name: Copy locale file
+  copy:
+    src: locale
+    dest: /etc/default/locale
+    owner: root
+    group: root
+    mode: 0644
+  become: yes

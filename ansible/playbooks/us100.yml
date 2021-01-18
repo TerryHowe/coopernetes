@@ -4,6 +4,7 @@
   roles:
     - role: raspinit
     - role: python3
+    - role: locale
     - role: keyboard
     - role: gpio
     - role: reboot
