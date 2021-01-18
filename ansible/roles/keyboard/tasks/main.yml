@@ -1,5 +1,5 @@
 ---
-- name: Copy over the kube config
+- name: Copy over keyboard
   copy:
     src: keyboard
     dest: /etc/default/keyboard
