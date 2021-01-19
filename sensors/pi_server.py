@@ -86,6 +86,12 @@ def dht22_png():
                                'dht22.png', mimetype='image/png')
 
 
+@app.route('/us100.jpg')
+def us100_jpg():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'us100.jpg', mimetype='image/jpg')
+
+
 @app.route('/favicon-16x16.png')
 def favicon_16x16():
     return send_from_directory(os.path.join(app.root_path, 'static'),
