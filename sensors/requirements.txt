@@ -1,7 +1,9 @@
 flask
 py-healthcheck
 psutil
+Adafruit-Blinka
 Adafruit_DHT
+adafruit-circuitpython-us100
 prometheus_client
 PyYAML
 uwsgi
