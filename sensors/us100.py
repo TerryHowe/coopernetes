@@ -3,15 +3,17 @@
 #from datetime import datetime, timezone
 
 import time
-import board
-import adafruit_hcsr04
-sonar = adafruit_hcsr04.HCSR04(trigger_pin=board.D5, echo_pin=board.D6)
+import adafruit_us100
+import serial
+
+uart = serial.Serial("/dev/ttyS0", baudrate=9600, timeout=3)
+print(uart)
+us100 = adafruit_us100.US100(uart)
 while True:
-    try:
-        print((sonar.distance,))
-    except RuntimeError:
-        print("Retrying!")
-    time.sleep(0.1)
+    print("-----")
+    print("Temperature: ", us100.temperature)
+    print("Distance: ", us100.distance)
+    time.sleep(0.5)
 
 #from prometheus_client import Gauge
 #
