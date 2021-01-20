@@ -9,4 +9,5 @@
     - role: gpio
     - role: reboot
     - role: pi_server
-      sensor_module: us100
+      sensor_modules:
+        - us100

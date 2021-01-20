@@ -9,4 +9,5 @@
     - role: gpio
     - role: reboot
     - role: pi_server
-      sensor_module: dht22
+      sensor_modules:
+        - dht22
