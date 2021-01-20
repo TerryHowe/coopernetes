@@ -8,11 +8,10 @@ from base_sensor import BaseSensor
 
 
 class Sensor(BaseSensor):
-    description = "DHT22 Sensor"
+    description = "US-100 Sensor"
     path = "us100"
     image = "us100_jpg"
     sample_rate = 30
-    sensor = Adafruit_DHT.DHT22
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
