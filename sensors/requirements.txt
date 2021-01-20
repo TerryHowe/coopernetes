@@ -7,3 +7,4 @@ adafruit-circuitpython-us100
 prometheus_client
 PyYAML
 uwsgi
+Werkzeug==1.0.1

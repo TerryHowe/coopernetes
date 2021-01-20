@@ -23,7 +23,7 @@ class Sensor(BaseSensor):
 
     def read_data(self):
         try:
-            us100 = adafruit_us100.US100(uart)
+            us100 = adafruit_us100.US100(self.uart)
             self.temperature.set(round((((us100.temperature * 9.0) / 5.0) + 32), 1))
             self.distance.set(round(us100.distance, 1))
         except Exception as e:
