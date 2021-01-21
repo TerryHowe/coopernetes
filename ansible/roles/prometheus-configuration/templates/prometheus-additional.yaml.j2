@@ -1,9 +1,10 @@
   - job_name:       'sensors'
-    scrape_interval: 30s
+    scrape_interval: 60s
     static_configs:
       - targets:
 {% for host in groups['thermometers'] %}
-        - '{{host}}:5000'
+        - "{{host}}:5000"
 {% endfor %}
-        labels:
-          group: 'dht22'
+{% for host in groups['food'] %}
+        - "{{host}}:5000"
+{% endfor %}

@@ -7,7 +7,7 @@
 
 - name: Make the secret
   block:
-  - name: Create pi_server config.yaml
+  - name: Create prometheus additional scrape configs
     template:
       src: prometheus-additional.yaml.j2
       dest: prometheus-additional.yaml
