@@ -1,18 +1,26 @@
 ---
-- name: Check for secret
-  command: kubectl get secret additional-scrape-configs -n monitoring
+- name: Get current scrape config
+  shell: kubectl get secret additional-scrape-configs -n monitoring --template='{''{.data}}' | sed -e 's/.*://' | base64 -D >prometheus-additional.yaml
   failed_when: False
   changed_when: False
   register: get_secret
 
-- name: Make the secret
-  block:
-  - name: Create prometheus additional scrape configs
-    template:
-      src: prometheus-additional.yaml.j2
-      dest: prometheus-additional.yaml
-      mode: '0640'
+- name: Create prometheus additional scrape configs
+  template:
+    src: prometheus-additional.yaml.j2
+    dest: prometheus-additional.yaml
+  register: create_config
 
-  - name: Create secret
-    command: kubectl create secret generic additional-scrape-configs -n monitoring --from-file=prometheus-additional.yaml
-  when: get_secret.rc != 0
+- name: Delete old secret
+  command: kubectl delete secret generic additional-scrape-configs -n monitoring
+  failed_when: False
+  when: create_config.changed
+
+- name: Create secret
+  command: kubectl create secret generic additional-scrape-configs -n monitoring --from-file=prometheus-additional.yaml
+  when: get_secret.rc != 0 or create_config.changed
+
+- name: Remove config
+  file:
+    dest: prometheus-additional.yaml
+    state: absent
