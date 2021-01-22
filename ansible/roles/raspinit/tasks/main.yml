@@ -1,4 +1,10 @@
 ---
+- name: update password
+  user:
+    name: pi
+    password: "{{ pi_password | password_hash('sha512') }}"
+  become: yes
+
 - name: Update repositories
   apt:
     update_cache: yes
