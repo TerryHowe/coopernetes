@@ -6,5 +6,5 @@
 
 - block:
   - name: kubeadm init
-    command: kubeadm init --config kube.yaml
+    command: kubeadm init --config /root/kube.yaml
     become: yes
