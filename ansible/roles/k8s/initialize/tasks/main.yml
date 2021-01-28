@@ -60,6 +60,8 @@
   block:
     # Raspbian must use convenience script for now
     # https://docs.docker.com/engine/install/debian/
+    # Don't use the convenience script, you cannot
+    # control release version
     - name: Download docker installation script
       get_url:
         url: https://get.docker.com

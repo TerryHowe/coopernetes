@@ -8,7 +8,8 @@ so we are not so attached when they get killed by a bear.
 
   The ansible configuration resides in `ansible.cfg` in the root of the repository.
 
-  1.  Create a password file containing the Ansible vault password in text on a single line at:
+  1.  Create a password file containing the Ansible vault password in text on a
+      single line at:
 
      ```
      echo 'yourpassword' >~/.ansiblevault
@@ -16,9 +17,6 @@ so we are not so attached when they get killed by a bear.
      ```
 
   1. Make sure you have an ssh key at `~/.ssh/id_rsa`
-
-  1. Get you purlic ssh key on the targets. There is a role that
-     will do that.
 
   1. Create a Python virtualenv
      ```
@@ -42,3 +40,7 @@ so we are not so attached when they get killed by a bear.
      ```
      pip install -r requirements.txt
      ```
+
+  1. Copy your ssh public key to the targets. The `sshable` role will prepare
+     a mounted Raspbian disk enabling ssh and copying ssh keys.
+
