@@ -1,4 +1,10 @@
 ---
+- name: apt-get install diskutil
+  apt:
+    name: diskutil
+    state: latest
+  become: True
+
 - name: Get list of mounts
   command: diskutil list
   register: mounts
