@@ -1,0 +1,5 @@
+---
+- name: Get list of mounts
+  command: diskutil list
+  register: mounts
+  become: yes

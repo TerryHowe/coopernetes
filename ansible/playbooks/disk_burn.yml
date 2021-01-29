@@ -1,0 +1,5 @@
+---
+- name: "Burn rpi disk"
+  hosts: k8sprimary
+  roles:
+    - role: disk-burn
