@@ -1,4 +1,26 @@
 ---
+- name: Check for mounted boot disk
+  shell: "lsblk -o PATH,MOUNTPOINT | grep /media/pi/boot| cut -f1 -d' '"
+  register: boot_disk
+  changed_when: False
+
+- name: Unmount boot
+  ansible.posix.mount:
+    path: /media/pi/boot
+    state: unmounted
+  when: boot_disk.stdout != ""
+
+- name: Check for mounted root disk
+  shell: "lsblk -o PATH,MOUNTPOINT | grep /media/pi/root| cut -f1 -d' '"
+  register: root_disk
+  changed_when: False
+
+- name: Unmount root
+  ansible.posix.mount:
+    path: /media/pi/root
+    state: unmounted
+  when: root_disk.stdout != ""
+
 - name: "Download image {{ download[arch].url }}/{{ download[arch].image }}"
   get_url:
     url: "{{ download[arch].url }}/{{ download[arch].image }}"
