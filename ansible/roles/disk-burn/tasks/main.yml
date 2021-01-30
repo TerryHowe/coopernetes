@@ -1,11 +1,10 @@
 ---
-- name: apt-get install diskutil
-  apt:
-    name: diskutil
-    state: latest
-  become: True
+- name: "Download image {{ download[arch].url }}/{{ download[arch].image }}"
+  get_url:
+    url: "{{ download[arch].url }}/{{ download[arch].image }}"
+    dest: "./{{ download[arch].image }}"
 
-- name: Get list of mounts
-  command: diskutil list
-  register: mounts
-  become: yes
+#- name: Get list of mounts
+#  command: diskutil list
+#  register: mounts
+#  become: yes
