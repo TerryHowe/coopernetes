@@ -21,10 +21,21 @@
     state: unmounted
   when: root_disk.stdout != ""
 
-- name: "Download image {{ download[arch].url }}/{{ download[arch].image }}"
+- name: "Create Downloads"
+  file:
+    path: ./Downloads
+    state: directory
+    mode: 0755
+
+- name: "Download image {{ download['arm64'].url }}/{{ download['arm64'].image }}"
   get_url:
-    url: "{{ download[arch].url }}/{{ download[arch].image }}"
-    dest: "./{{ download[arch].image }}"
+    url: "{{ download['arm64'].url }}/{{ download['arm64'].image }}"
+    dest: "./Downloads/{{ download['arm64'].image }}"
+
+- name: "Download image {{ download['arm32'].url }}/{{ download['arm32'].image }}"
+  get_url:
+    url: "{{ download['arm32'].url }}/{{ download['arm32'].image }}"
+    dest: "./Downloads/{{ download['arm32'].image }}"
 
 #- name: Get list of mounts
 #  command: diskutil list
