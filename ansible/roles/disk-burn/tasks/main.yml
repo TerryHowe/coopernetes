@@ -40,3 +40,4 @@
 
 - name: Burn it
   command: dd bs=4M if=./Downloads/{{ download[arch].image }} of=/dev/sda conv=fsync
+  become: yes
