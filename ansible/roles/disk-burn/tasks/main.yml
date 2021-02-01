@@ -15,6 +15,12 @@
   register: root_disk
   changed_when: False
 
+- name: Unmount boot
+  ansible.posix.mount:
+    path: /media/pi/boot
+    state: unmounted
+  when: root_disk.stdout != ""
+
 - name: Unmount root
   ansible.posix.mount:
     path: /media/pi/root
@@ -27,17 +33,10 @@
     state: directory
     mode: 0755
 
-- name: "Download image {{ download['arm64'].url }}/{{ download['arm64'].image }}"
+- name: "Download image {{ download[arch].url }}/{{ download[arch].image }}"
   get_url:
-    url: "{{ download['arm64'].url }}/{{ download['arm64'].image }}"
-    dest: "./Downloads/{{ download['arm64'].image }}"
+    url: "{{ download[arch].url }}/{{ download[arch].image }}"
+    dest: "./Downloads/{{ download[arch].image }}"
 
-- name: "Download image {{ download['arm32'].url }}/{{ download['arm32'].image }}"
-  get_url:
-    url: "{{ download['arm32'].url }}/{{ download['arm32'].image }}"
-    dest: "./Downloads/{{ download['arm32'].image }}"
-
-#- name: Get list of mounts
-#  command: diskutil list
-#  register: mounts
-#  become: yes
+- name: Burn it
+  command: dd bs=4M if=./Downloads/{{ download[arch].image }} of=/dev/sda conv=fsync
