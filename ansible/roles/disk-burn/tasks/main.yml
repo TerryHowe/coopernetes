@@ -39,5 +39,6 @@
     dest: "./Downloads/{{ download[arch].image }}"
 
 - name: Burn it
-  command: dd bs=4M if=./Downloads/{{ download[arch].image }} of=/dev/sda conv=fsync
+  shell: unzip -p ./Downloads/{{ download[arch].image }} | dd bs=4M of=/dev/sda conv=fsync
+  command_warnings: False
   become: yes
