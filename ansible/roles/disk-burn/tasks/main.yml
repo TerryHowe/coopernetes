@@ -42,6 +42,7 @@
     src: /dev/sda1
     fstype: vfat
     state: mounted
+  become: yes
 
 - name: Mount root
   ansible.posix.mount:
@@ -49,3 +50,4 @@
     src: /dev/sda2
     fstype: ext4
     state: mounted
+  become: yes
