@@ -4,14 +4,8 @@
   register: boot_disk
   changed_when: False
 
-- name: Unmount boot
-  ansible.posix.mount:
-    path: /media/pi/boot
-    state: unmounted
-  when: boot_disk.stdout != ""
-
 - name: Check for mounted root disk
-  shell: "lsblk -o PATH,MOUNTPOINT | grep /media/pi/root| cut -f1 -d' '"
+  shell: "lsblk -o PATH,MOUNTPOINT | grep /media/pi/rootfs | cut -f1 -d' '"
   register: root_disk
   changed_when: False
 
@@ -19,13 +13,11 @@
   ansible.posix.mount:
     path: /media/pi/boot
     state: unmounted
-  when: root_disk.stdout != ""
 
 - name: Unmount root
   ansible.posix.mount:
-    path: /media/pi/root
+    path: /media/pi/rootfs
     state: unmounted
-  when: root_disk.stdout != ""
 
 - name: "Create Downloads"
   file:
@@ -39,6 +31,21 @@
     dest: "./Downloads/{{ download[arch].image }}"
 
 - name: Burn it
-  shell: unzip -p ./Downloads/{{ download[arch].image }} | dd bs=4M of=/dev/sda conv=fsync
-  command_warnings: False
+  shell:
+    cmd: unzip -p ./Downloads/{{ download[arch].image }} | dd bs=4M of=/dev/sda conv=fsync
+    warn: False
   become: yes
+
+- name: Mount boot
+  ansible.posix.mount:
+    path: /media/pi/boot
+    src: /dev/sda1
+    fstype: vfat
+    state: mounted
+
+- name: Mount root
+  ansible.posix.mount:
+    path: /media/pi/rootfs
+    src: /dev/sda2
+    fstype: ext4
+    state: mounted
