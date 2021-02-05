@@ -28,3 +28,8 @@
     path: '{{mount_point}}/rootfs/home/pi/.ssh/authorized_keys'
     user: pi
   loop: '{{ssh_public_keys}}'
+
+- name: Disable setup wizzard for desktop version
+  file:
+    path: '{{mount_point}}/root/etc/xdg/autostart/piwiz.desktop'
+    state: absent
