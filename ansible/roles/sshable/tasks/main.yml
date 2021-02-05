@@ -31,5 +31,18 @@
 
 - name: Disable setup wizzard for desktop version
   file:
-    path: '{{mount_point}}/root/etc/xdg/autostart/piwiz.desktop'
+    path: '{{mount_point}}/rootfs/etc/xdg/autostart/piwiz.desktop'
     state: absent
+  become: yes
+
+- name: Unmount boot
+  ansible.posix.mount:
+    path: /media/pi/boot
+    state: unmounted
+  become: yes
+
+- name: Unmount root
+  ansible.posix.mount:
+    path: /media/pi/rootfs
+    state: unmounted
+  become: yes
