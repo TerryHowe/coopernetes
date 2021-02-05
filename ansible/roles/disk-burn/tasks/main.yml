@@ -13,11 +13,13 @@
   ansible.posix.mount:
     path: /media/pi/boot
     state: unmounted
+  become: yes
 
 - name: Unmount root
   ansible.posix.mount:
     path: /media/pi/rootfs
     state: unmounted
+  become: yes
 
 - name: "Create Downloads"
   file:
