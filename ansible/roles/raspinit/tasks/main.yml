@@ -5,17 +5,22 @@
     password: "{{ pi_password | password_hash('sha512') }}"
   become: yes
 
-- name: Update repositories
+- name: apt-get full-upgrade
   apt:
     update_cache: yes
-    upgrade: dist
+    upgrade: full
   become: yes
 
 - name: apt-get install git
   apt:
     name: git
     state: latest
-  become: True
+  become: yes
+
+- name: Remove dependencies that are no longer required
+  apt:
+    autoremove: yes
+  become: yes
 
 - name: hostname file
   copy:
