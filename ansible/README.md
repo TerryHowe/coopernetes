@@ -46,16 +46,27 @@ The ansible configuration resides in `ansible.cfg` in the root of the repository
 
 ## Playbooks
 
-Several different playbooks have been created to fully automate the deployment of
-Coopernetes. Many of these playbooks are generic and not strictly related to this
-project.
+Several different playbooks have been created to fully automate the deployment
+of Coopernetes. Many of these playbooks are generic and not strictly related to
+this project.
 
 1. The first step in deploying Coopernetes to a Raspberry is burning a disk. This
-   playbook assumes you already have a Raspberry setup to run the playbook, so there
-   is a bit of a chicken or the egg situation. You will need to first create a disk
-   with the Raspberry Pi Imager, enable ssh, wifi and set your public key in the
-   authorized keys for the user pi. These are exactly the steps that this playbook
-   automates. There is currently support for `arch=arm32` and `arch=arm6`:
+   playbook assumes you already have a Raspberry setup to run the playbook, so
+   there is a bit of a chicken or the egg situation. You will need to first
+   create a disk with the Raspberry Pi Imager, enable ssh, wifi and set your
+   public key in the authorized keys for the user pi. These are exactly the
+   steps that this playbook automates. There is currently support for
+   `arch=arm32` and `arch=arm64`:
    ```
    ansible-playbook -v -e arch=arm32 playbooks/disk_burn.yml
+   ```
+   It is expected that you are burning disks on you `k8sprimary` host. See the
+   `host.ini` file and update it with your IP address for that node.  The next
+   step is putting the disk in a Raspberry Pi you want to configure, booting it
+   and running the playbook on it associated with the desired function.
+
+1. Sensor playbooks are named after the shorthand name of the associated sensor.
+   For example, if you had a US-100 distance sensor, you would run:
+   ```
+   ansible-playbook -v playbooks/us100.yml
    ```
