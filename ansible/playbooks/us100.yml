@@ -7,6 +7,7 @@
     - role: locale
     - role: keyboard
     - role: gpio
+    - role: serial
     - role: reboot
     - role: pi_server
       sensor_modules:
