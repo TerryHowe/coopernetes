@@ -1,9 +1,39 @@
 ---
+- name: Disable default locale
+  locale_gen:
+    name: en_GB.UTF-8
+    state: absent
+  become: yes
+
+- name: Enable '{{ locale_language }}'
+  locale_gen:
+    name: "{{ locale_language }}"
+    state: present
+  become: yes
+
 - name: Copy locale file
-  copy:
+  template:
     src: locale
     dest: /etc/default/locale
     owner: root
     group: root
     mode: 0644
   become: yes
+
+- name: Get current locale
+  command: localectl status
+  register: locale_status
+  changed_when: false
+  become: yes
+
+- name: Parse 'LANG' from current locale
+  set_fact:
+    current_locale_lang: "{{ locale_status.stdout | regex_search('LANG=([^\n]+)', '\\1') | first }}"
+
+- name: Parse 'LANGUAGE' from current locale
+  set_fact:
+    current_locale_language: "{{ locale_status.stdout | regex_search('LANGUAGE=([^\n]+)', '\\1') | default([current_locale_lang], true) | first }}"
+
+- name: Configure locale to '{{ locale_lang }}' and language to '{{ locale_language }}'
+  command: localectl set-locale LANG={{ locale_lang }} LANGUAGE={{ locale_language }}
+  changed_when: current_locale_lang != locale_lang or current_locale_language != locale_language
