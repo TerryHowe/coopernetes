@@ -28,3 +28,12 @@ for a temperature sensor looks like:
 The metrics names are made up of host name, sensor type, optionally GPIO
 pin and metric identifier. In this example, the host is rpi128, sensor
 is dht22, GPIO pin 18, and metric is temperature and humidity.
+
+# Development and Testing
+
+Most of the sensors will probably not work on your development machine
+unless you are developing on a Raspberry Pi. To make things easier for
+development and testing, the pi_sensor server looks for a `config.yaml`
+first and if that does not exist, it reads the `sample_config.yaml`. The
+sample config loads the `example_sensor` so you can test the sensor server
+on a machine that does not have special libraries or software.
