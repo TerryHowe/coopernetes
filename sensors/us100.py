@@ -19,13 +19,13 @@ class Sensor(BaseSensor):
         self.distance = Gauge(name_prefix + '_distance', 'Distance inches')
         self.temperature = Gauge(name_prefix + '_temperature', 'Temperature')
         self.uart = serial.Serial("/dev/ttyS0", baudrate=9600, timeout=3)
+        self.us100 = adafruit_us100.US100(self.uart)
 
 
     def read_data(self):
         try:
-            us100 = adafruit_us100.US100(self.uart)
-            self.temperature.set(round((((us100.temperature * 9.0) / 5.0) + 32), 1))
-            self.distance.set(round((us100.distance / 2.54), 1))
+            self.temperature.set(round((((self.us100.temperature * 9.0) / 5.0) + 32), 1))
+            self.distance.set(round((self.us100.distance / 2.54), 1))
         except Exception as e:
             import traceback
             traceback.print_exc()
