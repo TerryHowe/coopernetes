@@ -37,3 +37,21 @@ development and testing, the pi_sensor server looks for a `config.yaml`
 first and if that does not exist, it reads the `sample_config.yaml`. The
 sample config loads the `example_sensor` so you can test the sensor server
 on a machine that does not have special libraries or software.
+
+# Adding a Sensor
+
+A new sensor can be added as long as the class name is `Sensor` and it
+derives from `BaseSensor`. It must define the `read_data` method:
+
+    from prometheus_client import Gauge
+    from base_sensor import BaseSensor
+    
+    class Sensor(BaseSensor):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            self.reading = Gauge('reading', 'Reading')
+    
+        def read_data(self):
+            self.reading.set(4)
+
+To load the sensor, just add the module name to your configuration file.
