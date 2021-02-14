@@ -23,8 +23,8 @@
 - name: apt-get install k8s stuff
   apt:
     name:
-      - kubeadm=1.18.9-00
-      - kubectl=1.18.9-00
-      - kubelet=1.18.9-00
+      - kubeadm={{ k8s_version }}
+      - kubectl={{ k8s_version }}
+      - kubelet={{ k8s_version }}
     state: present
   become: True
