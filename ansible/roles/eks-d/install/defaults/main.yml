@@ -1,0 +1,5 @@
+---
+k8s_version: v1.18.9
+release_branch: 1-18
+release: 1
+eksd_url: https://distro.eks.amazonaws.com/kubernetes-{{ release_branch }}/releases/{{ release }}/artifacts/kubernetes/{{ k8s_version }}

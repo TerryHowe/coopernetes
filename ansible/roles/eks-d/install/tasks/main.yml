@@ -1,0 +1,36 @@
+---
+- name: "Download {{ eksd_url }}/bin/linux/arm64/kubectl"
+  get_url:
+    url: "{{ eksd_url }}/bin/linux/arm64/kubectl"
+    dest: /usr/bin/kubectl
+  become: yes
+
+- name: "Set kubectl permissions"
+  ansible.builtin.file:
+    path: /usr/bin/kubectl
+    mode: '0755'
+  become: yes
+
+- name: "Download {{ eksd_url }}/bin/linux/arm64/kubelet"
+  get_url:
+    url: "{{ eksd_url }}/bin/linux/arm64/kubelet"
+    dest: /usr/bin/kubelet
+  become: yes
+
+- name: "Set kubelet permissions"
+  ansible.builtin.file:
+    path: /usr/bin/kubelet
+    mode: '0755'
+  become: yes
+
+- name: "Download {{ eksd_url }}/bin/linux/arm64/kubeadm"
+  get_url:
+    url: "{{ eksd_url }}/bin/linux/arm64/kubeadm"
+    dest: /usr/bin/kubeadm
+  become: yes
+
+- name: "Set kubeadm permissions"
+  ansible.builtin.file:
+    path: /usr/bin/kubeadm
+    mode: '0755'
+  become: yes
