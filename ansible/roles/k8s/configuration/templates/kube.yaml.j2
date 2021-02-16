@@ -27,15 +27,15 @@ controllerManager: {}
 dns:
   type: CoreDNS
   imageRepository: public.ecr.aws/eks-distro/coredns
-  imageTag: v1.7.0-eks-1-18-1
+  imageTag: v1.7.0-eks-{{ release_branch }}-{{ release }}
 etcd:
   local:
     dataDir: /var/lib/etcd
     imageRepository: public.ecr.aws/eks-distro/etcd-io
-    imageTag: v3.4.14-eks-1-18-1 
+    imageTag: v3.4.14-eks-{{ release_branch }}-{{ release }}
 imageRepository: public.ecr.aws/eks-distro/kubernetes
 kind: ClusterConfiguration
-kubernetesVersion: v1.18.9-eks-1-18-1
+kubernetesVersion: v{{ k8s_version }}-eks-{{ release_branch }}-{{ release }}
 networking:
   dnsDomain: cluster.local
   serviceSubnet: 10.96.0.0/12
