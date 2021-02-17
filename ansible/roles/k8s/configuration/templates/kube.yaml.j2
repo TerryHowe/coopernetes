@@ -26,14 +26,14 @@ clusterName: kubernetes
 controllerManager: {}
 dns:
   type: CoreDNS
-  imageRepository: public.ecr.aws/eks-distro/coredns
+  imageRepository: {{ image_repo }}/coredns
   imageTag: v1.7.0-eks-{{ release_branch }}-{{ release }}
 etcd:
   local:
     dataDir: /var/lib/etcd
-    imageRepository: public.ecr.aws/eks-distro/etcd-io
+    imageRepository: {{ image_repo }}/etcd-io
     imageTag: v3.4.14-eks-{{ release_branch }}-{{ release }}
-imageRepository: public.ecr.aws/eks-distro/kubernetes
+imageRepository: {{ image_repo }}/kubernetes
 kind: ClusterConfiguration
 kubernetesVersion: v{{ k8s_version }}-eks-{{ release_branch }}-{{ release }}
 networking:

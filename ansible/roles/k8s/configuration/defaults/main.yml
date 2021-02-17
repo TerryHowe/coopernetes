@@ -2,3 +2,4 @@
 release: 1-18
 release_branch: 1
 k8s_version: 1.18.9
+image_repo: public.ecr.aws/eks-distro
