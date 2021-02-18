@@ -1,7 +1,7 @@
 ---
-- name: "Download {{ eksd_url }}/bin/linux/arm64/kubectl"
+- name: "Download {{ kubernetes_url }}/bin/linux/arm64/kubectl"
   get_url:
-    url: "{{ eksd_url }}/bin/linux/arm64/kubectl"
+    url: "{{ kubernetes_url }}/bin/linux/arm64/kubectl"
     dest: /usr/bin/kubectl
   become: yes
 
@@ -11,9 +11,9 @@
     mode: '0755'
   become: yes
 
-- name: "Download {{ eksd_url }}/bin/linux/arm64/kubelet"
+- name: "Download {{ kubernetes_url }}/bin/linux/arm64/kubelet"
   get_url:
-    url: "{{ eksd_url }}/bin/linux/arm64/kubelet"
+    url: "{{ kubernetes_url }}/bin/linux/arm64/kubelet"
     dest: /usr/bin/kubelet
   become: yes
 
@@ -23,9 +23,9 @@
     mode: '0755'
   become: yes
 
-- name: "Download {{ eksd_url }}/bin/linux/arm64/kubeadm"
+- name: "Download {{ kubernetes_url }}/bin/linux/arm64/kubeadm"
   get_url:
-    url: "{{ eksd_url }}/bin/linux/arm64/kubeadm"
+    url: "{{ kubernetes_url }}/bin/linux/arm64/kubeadm"
     dest: /usr/bin/kubeadm
   become: yes
 

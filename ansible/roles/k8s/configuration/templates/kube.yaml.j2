@@ -26,16 +26,16 @@ clusterName: kubernetes
 controllerManager: {}
 dns:
   type: CoreDNS
-  imageRepository: {{ image_repo }}/coredns
+  imageRepository: {{ repository_uri }}/coredns
   imageTag: v1.7.0-eks-{{ release_branch }}-{{ release }}
 etcd:
   local:
     dataDir: /var/lib/etcd
-    imageRepository: {{ image_repo }}/etcd-io
+    imageRepository: {{ repository_uri }}/etcd-io
     imageTag: v3.4.14-eks-{{ release_branch }}-{{ release }}
-imageRepository: {{ image_repo }}/kubernetes
+imageRepository: {{ repository_uri }}/kubernetes
 kind: ClusterConfiguration
-kubernetesVersion: v{{ k8s_version }}-eks-{{ release_branch }}-{{ release }}
+kubernetesVersion: {{ k8s_version }}-eks-{{ release_branch }}-{{ release }}
 networking:
   dnsDomain: cluster.local
   serviceSubnet: 10.96.0.0/12

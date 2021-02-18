@@ -1,5 +1,5 @@
 ---
-release: 1-18
-release_branch: 1
-k8s_version: 1.18.9
-image_repo: public.ecr.aws/eks-distro
+release_branch: 1-19
+release: 1
+k8s_version: v1.19.6
+repository_uri: public.ecr.aws/h1r8a7l5
