@@ -1,5 +1,0 @@
----
-- name: "Initialize rpi disk"
-  hosts: k8sprimary
-  roles:
-    - role: sshable
