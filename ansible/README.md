@@ -50,31 +50,35 @@ Several different playbooks have been created to fully automate the deployment
 of Coopernetes. Many of these playbooks are generic and not strictly related to
 this project.
 
-1. The first step in deploying Coopernetes to a Raspberry is burning a disk. This
-   playbook assumes you already have a Raspberry setup to run the playbook, so
-   there is a bit of a chicken or the egg situation. You will need to first
-   create a disk with the Raspberry Pi Imager, enable ssh, wifi and set your
-   public key in the authorized keys for the user pi. These are exactly the
-   steps that this playbook automates. There is currently support for
-   `arch=arm32` and `arch=arm64`:
-   ```
-   ansible-playbook -v -e arch=arm32 playbooks/disk_burn.yml
-   ```
-   It is expected that you are burning disks on you `k8sprimary` host. See the
-   `host.ini` file and update it with your IP address for that node.  The next
-   step is putting the disk in a Raspberry Pi you want to configure, booting it
-   and running the playbook on it associated with the desired function.
+The first step in deploying Coopernetes to a Raspberry is burning a disk. This
+playbook assumes you already have a Raspberry setup to run the playbook, so
+there is a bit of a chicken or the egg situation. You will need to first
+create a disk with the Raspberry Pi Imager, enable ssh, wifi and set your
+public key in the authorized keys for the user pi. These are exactly the
+steps that this playbook automates. There is currently support for
+`arch=arm32` and `arch=arm64`:
+```
+ansible-playbook -v -e arch=arm32 playbooks/disk_burn.yml
+```
+It is expected that you are burning disks on you `k8sprimary` host. See the
+`host.ini` file and update it with your IP address for that node.  The next
+step is putting the disk in a Raspberry Pi you want to configure, booting it
+and running the playbook on it associated with the desired function.
 
-1. Sensor playbooks are named after the shorthand name of the associated sensor.
-   For example, if you had a US-100 distance sensor, you would run:
-   ```
-   ansible-playbook -v playbooks/us100.yml
-   ```
+### Sensors
 
-1. If you are creating a node for the Kubernetes cluster, start by running the
-   k8sinstall playbook. This playbook is for primary and worker nodes. It will
-   make changes to the operating system required to run Kubernetes, it will
-   install docker and it will install Kubernetes.
+Sensor playbooks are named after the shorthand name of the associated sensor.
+For example, if you had a US-100 distance sensor, you would run:
+```
+ansible-playbook -v playbooks/us100.yml
+```
 
-1. After install Kubernetes, you can either configure a node to be primary or
-   a worker with the `k8sprimary.yml` or `k8sworker.yml` playbooks.
+### Kubernetes
+
+If you are creating a node for the Kubernetes cluster, start by running the
+k8sinstall playbook. This playbook is for primary and worker nodes. It will
+make changes to the operating system required to run Kubernetes, it will
+install docker and it will install Kubernetes.
+
+After install Kubernetes, you can either configure a node to be primary or
+a worker with the `k8sprimary.yml` or `k8sworker.yml` playbooks.
