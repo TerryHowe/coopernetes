@@ -80,5 +80,13 @@ k8sinstall playbook. This playbook is for primary and worker nodes. It will
 make changes to the operating system required to run Kubernetes, it will
 install docker and it will install Kubernetes.
 
+```
+ansible-playbook -v playbooks/k8sinstall.yml
+```
+
 After install Kubernetes, you can either configure a node to be primary or
 a worker with the `k8sprimary.yml` or `k8sworker.yml` playbooks.
+
+```
+ansible-playbook -v playbooks/k8sworker.yml
+```
