@@ -90,3 +90,12 @@ a worker with the `k8sprimary.yml` or `k8sworker.yml` playbooks.
 ```
 ansible-playbook -v playbooks/k8sworker.yml
 ```
+
+### Prometheus, Grafana, and Alert Manager
+
+Once you have your Kubernetes cluster running, you need to start the monitoring
+software Prometheus, Grafana and Alert Manager.
+
+```
+ansible-playbook -v playbooks/prometheus.yml
+```
