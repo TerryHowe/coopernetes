@@ -32,13 +32,20 @@
       command: bash -c "KUBECONFIG={{ lookup('env', 'HOME') }}/.kube/config:{{ lookup('env', 'HOME') }}/.kube/{{ hostname }} kubectl config view --flatten > {{ lookup('env', 'HOME') }}/.kube/newconfig"
       delegate_to: localhost
 
-#    - name: Rename context
-#      command: kubectl config rename-context --kubeconfig "{{ lookup('env', 'HOME') }}/.kube/newconfig" kubernetes-admin@kubernetes "{{ hostname }}"
-#      delegate_to: localhost
-#
-#    - name: Set host as current context
-#      command: kubectl config set-context --kubeconfig "{{ lookup('env', 'HOME') }}/.kube/newconfig" "{{ hostname }}"
-#      delegate_to: localhost
+    - name: Rename context
+      command: kubectl config rename-context --kubeconfig "{{ lookup('env', 'HOME') }}/.kube/newconfig" "kubernetes-admin@{{ hostname }}" "{{ hostname }}"
+      delegate_to: localhost
+
+    - name: Set host as current context
+      command: kubectl config set-context --kubeconfig "{{ lookup('env', 'HOME') }}/.kube/newconfig" "{{ hostname }}"
+      delegate_to: localhost
+
+    - name: Rename user from kubenetes-admin
+      ansible.builtin.replace:
+        path: "{{ lookup('env', 'HOME') }}/.kube/newconfig" 
+        regexp: "kubernetes-admin"
+        replace: "{{ hostname }}-admin"
+      delegate_to: localhost
 
     - name: Activate new config
       copy:
