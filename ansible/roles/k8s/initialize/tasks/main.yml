@@ -69,7 +69,7 @@
         mode: '0755'
 
     - name: Run docker install
-      shell: VERSION=5:18.09.6 /home/pi/get-docker.sh
+      shell: VERSION=5:19.03.15 /home/pi/get-docker.sh
       become: yes
   when: not docker_executable.stat.exists
 
