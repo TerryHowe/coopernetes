@@ -1,0 +1,5 @@
+---
+- name: "Start Ingress"
+  hosts: localhost
+  roles:
+    - role: ingress-nginx
