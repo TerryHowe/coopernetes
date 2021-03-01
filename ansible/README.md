@@ -92,6 +92,16 @@ a worker with the `k8sprimary.yml` or `k8sworker.yml` playbooks.
 ansible-playbook -v playbooks/k8sworker.yml
 ```
 
+### Ingress
+
+I suspected that a conflict between the Ingress controller and Flannel
+was causing both of them to fail, so I broke out the Ingress controller
+into another playbook:
+
+```
+ansible-playbook -v playbooks/ingress-nginx.yml
+```
+
 ### Prometheus, Grafana, and Alert Manager
 
 Once you have your Kubernetes cluster running, you need to start the monitoring
