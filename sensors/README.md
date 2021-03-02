@@ -55,3 +55,4 @@ derives from `BaseSensor`. It must define the `read_data` method:
             self.reading.set(4)
 
 To load the sensor, just add the module name to your configuration file.
+See the `sample_config.yaml` for an example of the format of this file.
