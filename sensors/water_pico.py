@@ -1,26 +1,22 @@
-// the value of the 'other' resistor
-#define SERIESRESISTOR 560    
+SERIESRESISTOR 560  # the value of the 'other' resistor
+SENSORPIN A0        # What pin to connect the sensor to
+LOOP_DELAY 1000     # What pin to connect the sensor to
  
-// What pin to connect the sensor to
-#define SENSORPIN A0 
+def setup(void)
+    Serial.begin(9600);
  
-void setup(void) {
-  Serial.begin(9600);
-}
+def loop(void)
+    float reading;
  
-void loop(void) {
-  float reading;
+    reading = analogRead(SENSORPIN);
  
-  reading = analogRead(SENSORPIN);
+    Serial.print("Analog reading "); 
+    Serial.println(reading);
  
-  Serial.print("Analog reading "); 
-  Serial.println(reading);
+    # convert the value to resistance
+    reading = (1023 / reading)  - 1;
+    reading = SERIESRESISTOR / reading;
+    Serial.print("Sensor resistance "); 
+    Serial.println(reading);
  
-  // convert the value to resistance
-  reading = (1023 / reading)  - 1;
-  reading = SERIESRESISTOR / reading;
-  Serial.print("Sensor resistance "); 
-  Serial.println(reading);
- 
-  delay(1000);
-}
+    delay(LOOP_DELAY);
