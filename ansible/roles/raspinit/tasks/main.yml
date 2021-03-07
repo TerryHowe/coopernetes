@@ -11,6 +11,10 @@
     upgrade: full
   become: yes
 
+- name: update eprom
+  command: rpi-eprom-update
+  become: yes
+
 - name: apt-get install git
   apt:
     name: git
