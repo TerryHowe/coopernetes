@@ -42,7 +42,9 @@ The ansible configuration resides in `ansible.cfg` in the root of the repository
    ```
 
 1. Copy your ssh public key to the targets. The `sshable` role will prepare
-   a mounted Raspbian disk enabling ssh and copying ssh keys.
+   a mounted Raspbian disk enabling ssh and copying ssh keys. You need to
+   copy your public key into the `sshable` vars so it will be available on
+   the raspberries.
 
 ## Playbooks
 
