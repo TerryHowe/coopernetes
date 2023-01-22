@@ -1,5 +1,5 @@
 ---
-release_branch: 1-19
+release_branch: 1-25
 release: 1
-k8s_version: v1.19.6
+k8s_version: v1.25.5
 repository_uri: public.ecr.aws/h1r8a7l5

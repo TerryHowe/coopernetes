@@ -78,17 +78,17 @@ ansible-playbook -v playbooks/us100.yml
 ### Kubernetes
 
 If you are creating a node for the Kubernetes cluster, start by running the
-k8sinstall playbook. This playbook is for primary and worker nodes. It will
-make changes to the operating system required to run Kubernetes, it will
-install docker and it will install Kubernetes. This example targets one
+k8sinstall playbook. This playbook is for control plane and worker nodes. It
+will make changes to the operating system required to run Kubernetes, it
+will install docker and it will install Kubernetes. This example targets one
 host:
 
 ```
 ansible-playbook -v -e target=172.27.27.123 playbooks/k8sinstall.yml
 ```
 
-After install Kubernetes, you can either configure a node to be primary or
-a worker with the `k8sprimary.yml` or `k8sworker.yml` playbooks.
+After install Kubernetes, you can either configure a node to be a control
+plane or a worker with the `k8sprimary.yml` or `k8sworker.yml` playbooks.
 
 ```
 ansible-playbook -v playbooks/k8sworker.yml
