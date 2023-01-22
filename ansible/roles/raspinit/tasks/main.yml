@@ -12,7 +12,7 @@
   become: yes
 
 - name: update eprom
-  command: rpi-eprom-update
+  command: rpi-eeprom-update
   become: yes
 
 - name: apt-get install git

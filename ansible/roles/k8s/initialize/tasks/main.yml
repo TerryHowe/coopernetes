@@ -47,8 +47,8 @@
   when: swapon.stdout != ""
 
 - name: Reboot if needed
-  include: reboot.yml
-  static: no
+  ansible.builtin.include_tasks:
+    file: reboot.yml
   when: kernel_args is changed or swapon.stdout != ""
 
 - name: Check that the docker executable exists
@@ -91,6 +91,6 @@
   register: daemon_json
 
 - name: Reboot if needed
-  include: reboot.yml
-  static: no
+  ansible.builtin.include_tasks:
+    file: reboot.yml
   when: daemon_json is changed
