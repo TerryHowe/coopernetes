@@ -2,4 +2,4 @@
 release_branch: 1-25
 release: 1
 k8s_version: v1.25.5
-repository_uri: public.ecr.aws/h1r8a7l5
+repository_uri: public.ecr.aws/eks-distro

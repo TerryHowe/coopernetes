@@ -1,4 +1,4 @@
-apiVersion: kubeadm.k8s.io/v1beta2
+apiVersion: kubeadm.k8s.io/v1beta3
 bootstrapTokens:
 - groups:
   - system:bootstrappers:kubeadm:default-node-token
@@ -12,7 +12,8 @@ localAPIEndpoint:
   advertiseAddress: {{ groups.k8sprimary[0] }}
   bindPort: 6443
 nodeRegistration:
-  criSocket: /var/run/dockershim.sock
+  criSocket: unix:/run/containerd/containerd.sock
+  imagePullPolicy: IfNotPresent
   name: {{ primary_hostname }}
   taints:
   - effect: NoSchedule
@@ -20,26 +21,25 @@ nodeRegistration:
 ---
 apiServer:
   timeoutForControlPlane: 4m0s
-apiVersion: kubeadm.k8s.io/v1beta2
+apiVersion: kubeadm.k8s.io/v1beta3
 certificatesDir: /etc/kubernetes/pki
 clusterName: {{ primary_hostname }}
 controllerManager: {}
 dns:
-  type: CoreDNS
   imageRepository: {{ repository_uri }}/coredns
-  imageTag: v1.8.0-eks-{{ release_branch }}-{{ release }}
+  imageTag: v1.9.3-eks-{{ release_branch }}-{{ release }}
 etcd:
   local:
     dataDir: /var/lib/etcd
     imageRepository: {{ repository_uri }}/etcd-io
-    imageTag: v3.4.14-eks-{{ release_branch }}-{{ release }}
+    imageTag: v3.5.6-eks-{{ release_branch }}-{{ release }}
 imageRepository: {{ repository_uri }}/kubernetes
 kind: ClusterConfiguration
 kubernetesVersion: {{ k8s_version }}-eks-{{ release_branch }}-{{ release }}
 networking:
   dnsDomain: cluster.local
-  serviceSubnet: 10.96.0.0/12
   podSubnet: 10.244.0.0/16
+  serviceSubnet: 10.96.0.0/12
 scheduler: {}
 ---
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
