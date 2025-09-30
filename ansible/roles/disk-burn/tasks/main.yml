@@ -34,7 +34,7 @@
 
 - name: Burn it
   shell:
-    cmd: unzip -p ./Downloads/{{ download[arch].image }} | dd bs=4M of=/dev/sda conv=fsync
+    cmd: xzcat ./Downloads/{{ download[arch].image }} | dd bs=4M of=/dev/sda conv=fsync status=progress
     warn: False
   become: yes
 
