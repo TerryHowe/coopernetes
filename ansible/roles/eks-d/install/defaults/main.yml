@@ -1,7 +1,7 @@
 ---
-release_branch: 1-25
-release: 1
-k8s_version: v1.25.5
+release_branch: 1-31
+release: 30
+k8s_version: v1.31.12
 repository_url: public.ecr.aws/eks-distro
 artifact_url: "https://eks-d-postsubmit-artifacts.s3-us-west-2.amazonaws.com/kubernetes-{{ release_branch }}/releases/{{ release }}/artifacts"
 kubernetes_url: "{{ artifact_url }}/kubernetes/{{ k8s_version }}"
