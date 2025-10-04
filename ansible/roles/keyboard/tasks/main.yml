@@ -7,3 +7,7 @@
     group: root
     mode: 0644
   become: yes
+
+- name: Apply keyboard configuration
+  command: setupcon
+  become: yes
