@@ -23,16 +23,13 @@ The ansible configuration resides in `ansible.cfg` in the root of the repository
    pip install virtualenvwrapper
    export WORKON_HOME=~/.virtualenvs
    mkdir -p $WORKON_HOME
-   virtualenv -p /usr/local/bin/python3 ${WORKON_HOME}/coop
+   virtualenv -p `which python3` ${WORKON_HOME}/coop
    ```
 
 1. Add to your shell rc script:
    ```
-   if command -v pyenv 1>/dev/null 2>&1; then
-     eval "$(pyenv init -)"
-   fi
    export WORKON_HOME=~/.virtualenvs
-   source ~/.pyenv/versions/3.7.3/bin/virtualenvwrapper.sh
+   source $(which virtualenvwrapper.sh)
    workon coop
    ```
 
