@@ -1,6 +1,6 @@
 ---
 - name: "Burn rpi disk"
-  hosts: k8sprimary
+  hosts: local
   roles:
     - role: disk-burn
     - role: sshable
