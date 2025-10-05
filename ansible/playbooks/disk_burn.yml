@@ -1,7 +1,6 @@
 ---
 - name: "Burn rpi disk"
-  hosts: localhost
-  connection: local
+  hosts: local
   roles:
     - role: disk-burn
     - role: sshable

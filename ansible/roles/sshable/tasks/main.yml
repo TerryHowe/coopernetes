@@ -2,7 +2,7 @@
 - name: enable ssh
   copy:
     content: ''
-    dest: '{{mount_point}}/bootfs/ssh'
+    dest: '{{mount_point}}/boot/ssh'
     force: no
     mode: 0755
   become: yes
@@ -10,7 +10,7 @@
 - name: wifi credentials
   copy:
     src: wpa_supplicant.conf
-    dest: '{{mount_point}}/bootfs/wpa_supplicant.conf'
+    dest: '{{mount_point}}/boot/wpa_supplicant.conf'
     mode: 0600
   become: yes
 
@@ -35,10 +35,14 @@
     state: absent
   become: yes
 
-- name: Unmount boot partition
-  shell: "diskutil unmount {{mount_point}}/bootfs"
+- name: Unmount boot
+  ansible.posix.mount:
+    path: /media/pi/boot
+    state: unmounted
   become: yes
 
-- name: Unmount root partition
-  shell: "diskutil unmount {{mount_point}}/rootfs"
+- name: Unmount root
+  ansible.posix.mount:
+    path: /media/pi/rootfs
+    state: unmounted
   become: yes
