@@ -1,24 +1,12 @@
 ---
-- name: Check for mounted boot disk
-  shell: "lsblk -o PATH,MOUNTPOINT | grep /media/pi/boot| cut -f1 -d' '"
-  register: boot_disk
+- name: Get disk number for SD card
+  shell: "diskutil list | grep -A 1 'external, physical' | grep '/dev/disk' | head -1 | awk '{print $1}'"
+  register: sd_card_disk
   changed_when: False
 
-- name: Check for mounted root disk
-  shell: "lsblk -o PATH,MOUNTPOINT | grep /media/pi/rootfs | cut -f1 -d' '"
-  register: root_disk
-  changed_when: False
-
-- name: Unmount boot
-  ansible.posix.mount:
-    path: /media/pi/boot
-    state: unmounted
-  become: yes
-
-- name: Unmount root
-  ansible.posix.mount:
-    path: /media/pi/rootfs
-    state: unmounted
+- name: Unmount all partitions on SD card
+  shell: "diskutil unmountDisk {{ sd_card_disk.stdout }}"
+  when: sd_card_disk.stdout != ""
   become: yes
 
 - name: "Create Downloads"
@@ -32,24 +20,12 @@
     url: "{{ download[arch].url }}/{{ download[arch].image }}"
     dest: "./Downloads/{{ download[arch].image }}"
 
-- name: Burn it
+- name: Burn image to SD card
   shell:
-    cmd: xzcat ./Downloads/{{ download[arch].image }} | dd bs=4M of=/dev/sda conv=fsync status=progress
+    cmd: xzcat ./Downloads/{{ download[arch].image }} | dd bs=4m of={{ sd_card_disk.stdout | replace('/dev/disk', '/dev/rdisk') }} conv=sync
     warn: False
   become: yes
 
-- name: Mount boot
-  ansible.posix.mount:
-    path: /media/pi/boot
-    src: /dev/sda1
-    fstype: vfat
-    state: mounted
-  become: yes
-
-- name: Mount root
-  ansible.posix.mount:
-    path: /media/pi/rootfs
-    src: /dev/sda2
-    fstype: ext4
-    state: mounted
+- name: Mount SD card partitions
+  shell: "diskutil mountDisk {{ sd_card_disk.stdout }}"
   become: yes
