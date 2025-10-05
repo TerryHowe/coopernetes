@@ -22,7 +22,7 @@
 
 - name: Burn image to SD card
   shell:
-    cmd: xzcat ./Downloads/{{ download[arch].image }} | dd bs=1m of={{ sd_card_disk.stdout | replace('/dev/disk', '/dev/rdisk') }}
+    cmd: xzcat ./Downloads/{{ download[arch].image }} | dd bs=1m status=progress of={{ sd_card_disk.stdout | replace('/dev/disk', '/dev/rdisk') }}
   become: yes
 
 - name: Mount SD card partitions
