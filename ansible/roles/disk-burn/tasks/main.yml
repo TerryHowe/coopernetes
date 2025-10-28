@@ -34,13 +34,13 @@
 
 - name: Burn it
   shell:
-    cmd: xzcat ./Downloads/{{ download[arch].image }} | dd bs=4M of=/dev/sda conv=fsync status=progress
+    cmd: xzcat ./Downloads/{{ download[arch].image }} | dd bs=4M of=/dev/sdb conv=fsync status=progress
   become: yes
 
 - name: Mount boot
   ansible.posix.mount:
     path: /media/pi/boot
-    src: /dev/sda1
+    src: /dev/sdb1
     fstype: vfat
     state: mounted
   become: yes
@@ -48,7 +48,7 @@
 - name: Mount root
   ansible.posix.mount:
     path: /media/pi/rootfs
-    src: /dev/sda2
+    src: /dev/sdb2
     fstype: ext4
     state: mounted
   become: yes
