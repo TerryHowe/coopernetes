@@ -20,11 +20,21 @@
     update_cache: yes
   become: yes
 
-- name: apt-get install k8s stuff
+- name: Install Kubernetes packages
   apt:
     name:
       - kubeadm={{ k8s_version }}
       - kubectl={{ k8s_version }}
       - kubelet={{ k8s_version }}
     state: present
-  become: True
+  become: yes
+
+- name: Hold Kubernetes packages at current version
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  become: yes
+  loop:
+    - kubeadm
+    - kubectl
+    - kubelet
