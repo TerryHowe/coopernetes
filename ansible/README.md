@@ -20,10 +20,12 @@ The ansible configuration resides in `ansible.cfg` in the root of the repository
 
 1. Create a Python virtualenv
    ```
-   pip install virtualenvwrapper
    export WORKON_HOME=~/.virtualenvs
    mkdir -p $WORKON_HOME
-   virtualenv -p `which python3` ${WORKON_HOME}/coop
+   # pip install virtualenvwrapper
+   # virtualenv -p `which python3` ${WORKON_HOME}/coop
+   python3 -m venv $WORKON_HOME/coop
+   source $WORKON_HOME/coop/bin/activate
    ```
 
 1. Add to your shell rc script:
