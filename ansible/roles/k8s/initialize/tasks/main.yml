@@ -19,7 +19,13 @@
   register: swapon
   changed_when: False
 
-- name: Turn off swap if needed
+- name: Check if dphys-swapfile exists
+  command: which dphys-swapfile
+  register: dphys_swapfile_check
+  changed_when: False
+  failed_when: False
+
+- name: Turn off swap if needed (using dphys-swapfile)
   block:
     - name: Turn swap off
       command: dphys-swapfile swapoff
@@ -44,7 +50,40 @@
         state: absent
         purge: yes
       become: yes
-  when: swapon.stdout != ""
+  when: swapon.stdout != "" and dphys_swapfile_check.rc == 0
+
+- name: Turn off swap if needed (generic method)
+  block:
+    - name: Disable all swap
+      command: swapoff -a
+      become: yes
+
+    - name: Remove swap entries from /etc/fstab
+      lineinfile:
+        path: /etc/fstab
+        regexp: '^[^#].*\s+swap\s+'
+        state: absent
+      become: yes
+
+    - name: Disable zram-swap service if present
+      systemd:
+        name: zram-swap
+        state: stopped
+        enabled: no
+      become: yes
+      failed_when: False
+
+    - name: Remove common swap files
+      file:
+        path: "{{ item }}"
+        state: absent
+      become: yes
+      loop:
+        - /var/swap
+        - /swap
+        - /swapfile
+      failed_when: False
+  when: swapon.stdout != "" and dphys_swapfile_check.rc != 0
 
 - name: Reboot if needed
   ansible.builtin.include_tasks:
