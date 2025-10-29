@@ -6,5 +6,16 @@
 
 - block:
   - name: kubeadm init
-    command: kubeadm init --config /root/kube.yaml
+    command: >
+      kubeadm init
+      --apiserver-advertise-address={{ groups.k8sprimary[0] }}
+      --node-name={{ primary_hostname }}
+      --pod-network-cidr=10.244.0.0/16
+      --cri-socket=unix:/run/containerd/containerd.sock
     become: yes
+    register: kubeadm_output
+
+  - name: Display kubeadm init output
+    debug:
+      var: kubeadm_output.stdout_lines
+  when: not k8s_conf.stat.exists
