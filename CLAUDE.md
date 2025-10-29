@@ -104,7 +104,11 @@ Sensor playbooks clone the coopernetes repo to `/home/pi/coopernetes` on the tar
 ```bash
 # Step 1: Install Kubernetes prerequisites and binaries
 # The target variable allows targeting specific IPs instead of inventory groups
+# Default: Kubernetes 1.31 (latest stable)
 ansible-playbook -v -e target=172.27.27.159 playbooks/k8sinstall.yml
+
+# To install a different version, override k8s_major_minor and k8s_version:
+ansible-playbook -v -e target=172.27.27.159 -e k8s_major_minor=1.30 -e k8s_version=1.30.8-1.1 playbooks/k8sinstall.yml
 
 # Step 2a: Configure as control plane node
 # Runs k8s/configuration, k8s/primary, k8s/users/*, and flannel roles
@@ -192,6 +196,10 @@ cd sensors
 - Server version is set from git tags via `run_server.sh:6`
 
 **Kubernetes:**
+- Default version: v1.31.4 (latest stable as of configuration)
+- Version is configurable via `k8s_major_minor` (e.g., "1.31") and `k8s_version` (e.g., "1.31.4-1.1")
+- Repository URL uses `k8s_major_minor` to determine package source
 - Ingress controller deployed separately from main stack due to potential Flannel conflicts
-- Control plane initialized with `kubeadm init`, workers join with token from primary
+- Control plane initialized with `kubeadm init` using command-line options (not config file)
+- Bootstrap token from encrypted `roles/k8s/configuration/vars/main.yml` used for worker joins
 - kubeconfig copied to root, pi, and localhost users via respective k8s/users roles

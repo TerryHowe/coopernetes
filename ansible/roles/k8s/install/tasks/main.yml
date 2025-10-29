@@ -7,7 +7,7 @@
 
 - name: Add apt signing key (using apt_key if available)
   apt_key:
-    url: https://pkgs.k8s.io/core:/stable:/v1.25/deb/Release.key
+    url: https://pkgs.k8s.io/core:/stable:/v{{ k8s_major_minor }}/deb/Release.key
     state: present
   become: yes
   when: apt_key_exists.rc == 0
@@ -22,7 +22,7 @@
 
 - name: Add Kubernetes GPG key manually (if apt-key not available)
   shell: |
-    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.25/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/v{{ k8s_major_minor }}/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
     chmod a+r /etc/apt/keyrings/kubernetes-apt-keyring.gpg
   args:
     creates: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
@@ -31,7 +31,7 @@
 
 - name: Create /etc/apt/sources.list.d/kubernetes.list (with keyring if apt-key not available)
   copy:
-    content: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.25/deb/ /\n"
+    content: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v{{ k8s_major_minor }}/deb/ /\n"
     dest: /etc/apt/sources.list.d/kubernetes.list
     owner: root
     group: root
@@ -41,7 +41,7 @@
 
 - name: Create /etc/apt/sources.list.d/kubernetes.list (without keyring if apt-key available)
   copy:
-    src: kubernetes.list
+    content: "deb https://pkgs.k8s.io/core:/stable:/v{{ k8s_major_minor }}/deb/ /\n"
     dest: /etc/apt/sources.list.d/kubernetes.list
     owner: root
     group: root

@@ -1,4 +1,8 @@
 ---
-# Kubernetes version - new pkgs.k8s.io repository uses format like 1.25.16-1.1
+# Kubernetes major.minor version (determines which repository to use)
+k8s_major_minor: "1.31"
+
+# Kubernetes full version - new pkgs.k8s.io repository uses format like 1.31.4-1.1
 # To find available versions on target system: apt-cache madison kubeadm
-k8s_version: 1.25.16-1.1
+# Leave empty to install latest available from the k8s_major_minor repository
+k8s_version: "1.31.4-1.1"

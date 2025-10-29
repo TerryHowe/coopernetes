@@ -1,1 +1,1 @@
-deb https://pkgs.k8s.io/core:/stable:/v1.25/deb/ /
+deb https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /

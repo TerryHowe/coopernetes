@@ -1,5 +1,8 @@
 ---
-release_branch: 1-25
+# Note: These vars are for the kube.yaml.j2 config template (EKS-D images)
+# The current deployment uses command-line kubeadm options instead
+# If you need to use the config file approach, update these values
+release_branch: 1-31
 release: 1
-k8s_version: v1.25.5
+k8s_version: v1.31.4
 repository_uri: public.ecr.aws/eks-distro
