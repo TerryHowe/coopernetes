@@ -1,2 +1,7 @@
 ---
 mount_point: /media/pi
+
+# Password hash for pi user on newer Raspberry Pi OS (Bookworm+)
+# Generate with: echo 'raspberry' | openssl passwd -6 -stdin
+# Default is 'raspberry' (for testing only, change in production!)
+pi_user_password_hash: "$6$rBoByrWRuLnVAzJg$nmREIGEXVdS15LsDW1KZDoNCRE0L3W7Xdq3aG5jsEG3KkEzXJHNLZqLWnCGwz6EKxB3MqgD1h/0.9TGIqbr7z0"

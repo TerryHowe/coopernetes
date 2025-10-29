@@ -1,8 +1,29 @@
 ---
-- name: enable ssh
+- name: Check if boot partition exists (older OS)
+  stat:
+    path: '{{mount_point}}/boot'
+  register: boot_partition
+
+- name: Check if bootfs/firmware partition exists (newer OS)
+  stat:
+    path: '{{mount_point}}/bootfs'
+  register: bootfs_partition
+  when: not boot_partition.stat.exists
+
+- name: Set boot path for older OS
+  set_fact:
+    boot_path: '{{mount_point}}/boot'
+  when: boot_partition.stat.exists
+
+- name: Set boot path for newer OS
+  set_fact:
+    boot_path: '{{mount_point}}/bootfs'
+  when: not boot_partition.stat.exists and bootfs_partition.stat.exists
+
+- name: enable ssh (creates empty ssh file)
   copy:
     content: ''
-    dest: '{{mount_point}}/boot/ssh'
+    dest: '{{ boot_path }}/ssh'
     force: no
     mode: 0755
   become: yes
@@ -10,9 +31,23 @@
 - name: wifi credentials
   copy:
     src: wpa_supplicant.conf
-    dest: '{{mount_point}}/boot/wpa_supplicant.conf'
+    dest: '{{ boot_path }}/wpa_supplicant.conf'
     mode: 0600
   become: yes
+  when: boot_path is defined
+
+- name: Check if pi user home directory exists
+  stat:
+    path: '{{mount_point}}/rootfs/home/pi'
+  register: pi_user_home
+
+- name: Create userconf.txt for newer OS (if pi user doesn't exist)
+  copy:
+    content: 'pi:{{ pi_user_password_hash }}'
+    dest: '{{ boot_path }}/userconf.txt'
+    mode: 0600
+  become: yes
+  when: boot_path is defined and not pi_user_home.stat.exists and pi_user_password_hash is defined
 
 - name: Create ssh directory
   file:
@@ -21,6 +56,7 @@
     owner: pi
     group: pi
     mode: 0700
+  when: pi_user_home.stat.exists
 
 - name: copy over ssh public keys
   authorized_key:
@@ -28,6 +64,7 @@
     path: '{{mount_point}}/rootfs/home/pi/.ssh/authorized_keys'
     user: pi
   loop: '{{ssh_public_keys}}'
+  when: pi_user_home.stat.exists
 
 - name: Disable setup wizzard for desktop version
   file:
