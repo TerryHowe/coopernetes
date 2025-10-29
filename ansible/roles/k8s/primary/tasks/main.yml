@@ -4,6 +4,10 @@
     path: /etc/kubernetes/admin.conf
   register: k8s_conf
 
+- name: Include configuration vars
+  include_vars:
+    file: ../../configuration/vars/main.yml
+
 - block:
   - name: kubeadm init
     command: >
@@ -12,6 +16,8 @@
       --node-name={{ primary_hostname }}
       --pod-network-cidr=10.244.0.0/16
       --cri-socket=unix:/run/containerd/containerd.sock
+      --token={{ bootstrap_token }}
+      --token-ttl=24h
     become: yes
     register: kubeadm_output
 
