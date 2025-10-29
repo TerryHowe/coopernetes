@@ -5,4 +5,3 @@
     - role: raspinit
     - role: k8s/initialize
     - role: k8s/install
-    - role: eks-d/install
