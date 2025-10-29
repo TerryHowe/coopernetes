@@ -54,6 +54,17 @@
     update_cache: yes
   become: yes
 
+- name: Check available Kubernetes versions
+  shell: apt-cache madison kubeadm | head -5
+  register: available_versions
+  changed_when: False
+  failed_when: False
+
+- name: Display available versions for debugging
+  debug:
+    msg: "Available kubeadm versions: {{ available_versions.stdout_lines }}"
+  when: available_versions.stdout_lines is defined
+
 - name: Install Kubernetes packages
   apt:
     name:
@@ -62,6 +73,21 @@
       - kubelet={{ k8s_version }}
     state: present
   become: yes
+  register: k8s_install_result
+  ignore_errors: yes
+
+- name: Show error if installation failed
+  debug:
+    msg: |
+      Failed to install Kubernetes {{ k8s_version }}.
+      Available versions: {{ available_versions.stdout_lines }}
+      Please update k8s_version in defaults/main.yml or pass -e k8s_version=X.X.X-X.X
+  when: k8s_install_result is failed
+
+- name: Fail if Kubernetes installation failed
+  fail:
+    msg: "Kubernetes installation failed. Check available versions above."
+  when: k8s_install_result is failed
 
 - name: Hold Kubernetes packages at current version
   dpkg_selections:

@@ -1,2 +1,4 @@
 ---
-k8s_version: 1.25.5-00
+# Kubernetes version - new pkgs.k8s.io repository uses format like 1.25.16-1.1
+# To find available versions on target system: apt-cache madison kubeadm
+k8s_version: 1.25.16-1.1
