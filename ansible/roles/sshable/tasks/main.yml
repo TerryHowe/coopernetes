@@ -1,76 +1,96 @@
 ---
-- name: Check if boot partition exists (older OS)
-  stat:
-    path: '{{mount_point}}/boot'
-  register: boot_partition
-
-- name: Check if bootfs/firmware partition exists (newer OS)
-  stat:
-    path: '{{mount_point}}/bootfs'
-  register: bootfs_partition
-  when: not boot_partition.stat.exists
-
-- name: Set boot path for older OS
+- name: Set boot path
   set_fact:
     boot_path: '{{mount_point}}/boot'
-  when: boot_partition.stat.exists
 
-- name: Set boot path for newer OS
-  set_fact:
-    boot_path: '{{mount_point}}/bootfs'
-  when: not boot_partition.stat.exists and bootfs_partition.stat.exists
-
-- name: enable ssh (creates empty ssh file)
-  copy:
-    content: ''
-    dest: '{{ boot_path }}/ssh'
-    force: no
-    mode: 0755
+- name: Enable SSH (creates empty ssh file in boot partition)
+  file:
+    path: '{{ boot_path }}/ssh'
+    state: touch
+    mode: '0644'
   become: yes
 
-- name: wifi credentials
+- name: Create userconf.txt for automatic user creation (Bookworm+)
+  copy:
+    content: 'pi:{{ pi_user_password_hash }}'
+    dest: '{{ boot_path }}/userconf.txt'
+    mode: '0600'
+  become: yes
+
+- name: Copy WiFi credentials to boot partition
   copy:
     src: wpa_supplicant.conf
     dest: '{{ boot_path }}/wpa_supplicant.conf'
-    mode: 0600
+    mode: '0600'
   become: yes
-  when: boot_path is defined
 
-- name: Check if pi user home directory exists
+- name: Check if pi user home directory exists (for older OS images)
   stat:
     path: '{{mount_point}}/rootfs/home/pi'
   register: pi_user_home
 
-- name: Create userconf.txt for newer OS (if pi user doesn't exist)
-  copy:
-    content: 'pi:{{ pi_user_password_hash }}'
-    dest: '{{ boot_path }}/userconf.txt'
-    mode: 0600
-  become: yes
-  when: boot_path is defined and not pi_user_home.stat.exists and pi_user_password_hash is defined
-
-- name: Create ssh directory
+- name: Create ssh directory for older OS (if pi user already exists)
   file:
     path: '{{mount_point}}/rootfs/home/pi/.ssh'
     state: directory
     owner: pi
     group: pi
-    mode: 0700
+    mode: '0700'
+  become: yes
   when: pi_user_home.stat.exists
 
-- name: copy over ssh public keys
+- name: Copy SSH public keys for older OS (if pi user already exists)
   authorized_key:
     key: '{{item}}'
     path: '{{mount_point}}/rootfs/home/pi/.ssh/authorized_keys'
     user: pi
+  become: yes
   loop: '{{ssh_public_keys}}'
   when: pi_user_home.stat.exists
 
-- name: Disable setup wizzard for desktop version
+- name: Create firstrun.sh script for SSH keys on newer OS (Bookworm+)
+  template:
+    src: firstrun.sh.j2
+    dest: '{{ boot_path }}/firstrun.sh'
+    mode: '0755'
+  become: yes
+  when: not pi_user_home.stat.exists
+  register: firstrun_created
+
+- name: Add firstrun.sh to cmdline.txt for newer OS
+  lineinfile:
+    path: '{{ boot_path }}/cmdline.txt'
+    backrefs: yes
+    regexp: '^(.*rootwait.*)$'
+    line: '\1 systemd.run=/boot/firstrun.sh systemd.run_success_action=reboot systemd.unit=kernel-command-line.target'
+  become: yes
+  when: not pi_user_home.stat.exists and firstrun_created is changed
+
+- name: Disable setup wizard for desktop version
   file:
     path: '{{mount_point}}/rootfs/etc/xdg/autostart/piwiz.desktop'
     state: absent
   become: yes
+  failed_when: false
+
+- name: Set locale to en_US.UTF-8 to skip locale wizard
+  lineinfile:
+    path: '{{mount_point}}/rootfs/etc/default/locale'
+    line: 'LANG=en_US.UTF-8'
+    create: yes
+  become: yes
+  failed_when: false
+
+- name: Set keyboard layout to US to skip keyboard wizard
+  copy:
+    content: |
+      XKBMODEL="pc105"
+      XKBLAYOUT="us"
+      XKBVARIANT=""
+      XKBOPTIONS=""
+    dest: '{{mount_point}}/rootfs/etc/default/keyboard'
+  become: yes
+  failed_when: false
 
 - name: Unmount boot
   ansible.posix.mount:

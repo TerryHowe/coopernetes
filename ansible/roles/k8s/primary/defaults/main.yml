@@ -1,0 +1,4 @@
+---
+# Hostname to use for the k8s primary node
+# Defaults to the system hostname
+primary_hostname: "{{ ansible_hostname }}"
