@@ -81,7 +81,7 @@ will install containerd and it will install Kubernetes. This example targets
 one host:
 
 ```
-ansible-playbook -v -e target=172.27.27.159 playbooks/k8sinstall.yml
+ansible-playbook -v -e target=172.28.28.6 playbooks/k8sinstall.yml
 ```
 
 After install Kubernetes, you can either configure a node to be a control
