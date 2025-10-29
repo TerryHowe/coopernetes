@@ -1,5 +1,45 @@
 ---
-- name: Create /etc/apt/sources.list.d/kubernetes.list
+- name: Check if apt-key command exists
+  command: which apt-key
+  register: apt_key_exists
+  changed_when: False
+  failed_when: False
+
+- name: Add apt signing key (using apt_key if available)
+  apt_key:
+    url: https://pkgs.k8s.io/core:/stable:/v1.25/deb/Release.key
+    state: present
+  become: yes
+  when: apt_key_exists.rc == 0
+
+- name: Create keyrings directory (if apt-key not available)
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  become: yes
+  when: apt_key_exists.rc != 0
+
+- name: Add Kubernetes GPG key manually (if apt-key not available)
+  shell: |
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.25/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    chmod a+r /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+  args:
+    creates: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+  become: yes
+  when: apt_key_exists.rc != 0
+
+- name: Create /etc/apt/sources.list.d/kubernetes.list (with keyring if apt-key not available)
+  copy:
+    content: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.25/deb/ /\n"
+    dest: /etc/apt/sources.list.d/kubernetes.list
+    owner: root
+    group: root
+    mode: '0644'
+  become: yes
+  when: apt_key_exists.rc != 0
+
+- name: Create /etc/apt/sources.list.d/kubernetes.list (without keyring if apt-key available)
   copy:
     src: kubernetes.list
     dest: /etc/apt/sources.list.d/kubernetes.list
@@ -7,13 +47,7 @@
     group: root
     mode: '0644'
   become: yes
-  register: kubernetes_list
-
-- name: Add apt signing key
-  apt_key:
-    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-    state: present
-  become: yes
+  when: apt_key_exists.rc == 0
 
 - name: Update repositories
   apt:

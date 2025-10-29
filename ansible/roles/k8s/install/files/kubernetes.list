@@ -1,1 +1,1 @@
-deb http://apt.kubernetes.io/ kubernetes-xenial main
+deb https://pkgs.k8s.io/core:/stable:/v1.25/deb/ /
