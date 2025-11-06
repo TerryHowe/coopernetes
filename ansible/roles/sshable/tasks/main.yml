@@ -19,7 +19,7 @@
 
 - name: Check if pi user home directory exists (for older OS images)
   stat:
-    path: '{{mount_point}}/rootfs/home/pi'
+    path: '{{mount_point}}/rootfs/home/billy'
   register: pi_user_home
 
 - name: Create userconf.txt for automatic user creation (Bookworm+ only)
@@ -29,6 +29,15 @@
     mode: '0600'
   become: yes
   when: not pi_user_home.stat.exists
+
+- name: Create pi home directory
+  file:
+    path: '{{mount_point}}/rootfs/home/pi
+    state: directory
+    owner: pi
+    group: pi
+    mode: '0700'
+  become: yes
 
 - name: Create ssh directory for older OS (if pi user already exists)
   file:
@@ -70,6 +79,13 @@
 - name: Disable setup wizard for desktop version
   file:
     path: '{{mount_point}}/rootfs/etc/xdg/autostart/piwiz.desktop'
+    state: absent
+  become: yes
+  failed_when: false
+
+- name: Disable user setup
+  file:
+    path: '{{mount_point}}/rootfs/etc/xdg/autostart/xdg-user-dirs.desktop'
     state: absent
   become: yes
   failed_when: false

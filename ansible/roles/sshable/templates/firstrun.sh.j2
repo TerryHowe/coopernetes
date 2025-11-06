@@ -29,6 +29,10 @@ chown -R pi:pi /home/pi/.ssh
 
 # Disable the setup wizard
 rm -f /etc/xdg/autostart/piwiz.desktop
+rm -f /etc/xdg/autostart/xdg-user-dirs.desktop
+
+# Generate locale
+local-gen
 
 # Remove this script so it doesn't run again
 rm -f ${BOOT_DIR}/firstrun.sh
