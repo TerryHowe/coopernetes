@@ -3,7 +3,8 @@
 # This script runs on first boot for Raspberry Pi OS Bookworm and later
 # It sets up SSH keys and configuration for the pi user
 
-set +e
+echo '====== START FIRST RUN ======'
+set +xe
 
 # Determine boot partition location
 if [ -d /boot/firmware ]; then
@@ -31,11 +32,19 @@ chown -R pi:pi /home/pi/.ssh
 rm -f /etc/xdg/autostart/piwiz.desktop
 rm -f /etc/xdg/autostart/xdg-user-dirs.desktop
 
+# Enable wifi
+rfkill unblock wlan
+nmcli radio wifi on
+nmcli dev wifi connect {{wifi_ssid}} password {{wifi_password}} wep-key-type key
+
 # Generate locale
-local-gen
+echo apt-get update
+echo local-gen
 
 # Remove this script so it doesn't run again
 rm -f ${BOOT_DIR}/firstrun.sh
 sed -i 's| systemd.run.*||g' ${BOOT_DIR}/cmdline.txt
 
+set +x
+echo '====== STOP FIRST RUN ======'
 exit 0

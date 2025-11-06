@@ -32,7 +32,7 @@
 
 - name: Create pi home directory
   file:
-    path: '{{mount_point}}/rootfs/home/pi
+    path: '{{mount_point}}/rootfs/home/pi'
     state: directory
     owner: pi
     group: pi
