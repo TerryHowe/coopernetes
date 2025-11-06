@@ -11,10 +11,10 @@
   become: yes
 
 - name: Copy WiFi credentials to boot partition
-  copy:
-    src: wpa_supplicant.conf
-    dest: '{{ boot_path }}/wpa_supplicant.conf'
-    mode: '0600'
+  file:
+    path: '{{ boot_path }}/metadata'
+    state: touch
+    mode: '0644'
   become: yes
 
 - name: Check if pi user home directory exists (for older OS images)

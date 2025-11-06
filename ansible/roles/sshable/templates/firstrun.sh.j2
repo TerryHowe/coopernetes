@@ -38,8 +38,9 @@ nmcli radio wifi on
 nmcli dev wifi connect {{wifi_ssid}} password {{wifi_password}} wep-key-type key
 
 # Generate locale
-echo apt-get update
-echo local-gen
+echo 'en_US.UTF-8 UTF-8' >/etc/locale.gen
+local-gen
+update-locale LANG=en_US.UTF-8
 
 # Remove this script so it doesn't run again
 rm -f ${BOOT_DIR}/firstrun.sh
