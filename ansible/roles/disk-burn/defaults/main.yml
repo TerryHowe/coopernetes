@@ -1,5 +1,5 @@
 ---
-arch: arm32
+arch: arm64
 download:
   arm32:
     url: https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2025-10-02
