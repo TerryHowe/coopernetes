@@ -67,6 +67,13 @@
   when: not pi_user_home.stat.exists
   register: firstrun_created
 
+- name: Create firstrun.sh copy
+  template:
+    src: firstrun.sh.j2
+    dest: '{{ boot_path }}/rootfs/home/pi/firstrun.sh'
+    mode: '0755'
+  become: yes
+
 - name: Add firstrun.sh to cmdline.txt for newer OS
   lineinfile:
     path: '{{ boot_path }}/cmdline.txt'

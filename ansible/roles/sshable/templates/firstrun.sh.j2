@@ -39,7 +39,7 @@ nmcli radio wifi on
 cat << 'NMEOF' > /etc/NetworkManager/system-connections/gords.nmconnection
 [connection]
 id=gords
-uuid=$(uuidgen)
+uuid={{uuid}}
 type=wifi
 autoconnect=true
 permissions=
