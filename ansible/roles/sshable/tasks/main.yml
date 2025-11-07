@@ -116,6 +116,20 @@
   become: yes
   failed_when: false
 
+- name: Create rfkill-unblock systemd service
+  template:
+    src: rfkill-unblock.service.j2
+    dest: '{{mount_point}}/rootfs/etc/systemd/system/rfkill-unblock.service'
+    mode: '0644'
+  become: yes
+
+- name: Enable rfkill-unblock service
+  file:
+    src: '/etc/systemd/system/rfkill-unblock.service'
+    dest: '{{mount_point}}/rootfs/etc/systemd/system/multi-user.target.wants/rfkill-unblock.service'
+    state: link
+  become: yes
+
 - name: Unmount boot
   ansible.posix.mount:
     path: /media/pi/boot
