@@ -125,7 +125,7 @@
 
 - name: Enable rfkill-unblock service
   file:
-    src: '/etc/systemd/system/rfkill-unblock.service'
+    src: '{{mount_point}}/rootfs/etc/systemd/system/rfkill-unblock.service'
     dest: '{{mount_point}}/rootfs/etc/systemd/system/multi-user.target.wants/rfkill-unblock.service'
     state: link
   become: yes
