@@ -70,7 +70,7 @@
 - name: Create firstrun.sh copy
   template:
     src: firstrun.sh.j2
-    dest: '{{ boot_path }}/rootfs/home/pi/firstrun.sh'
+    dest: '{{ mount_point }}/rootfs/home/pi/firstrun.sh'
     mode: '0755'
   become: yes
 
