@@ -35,7 +35,6 @@ rm -f /etc/xdg/autostart/xdg-user-dirs.desktop
 # Enable wifi
 rfkill unblock wlan
 nmcli radio wifi on
-echo nmcli dev wifi connect {{wifi_ssid}} password {{wifi_password}} wep-key-type key
 # Create NetworkManager connection file
 cat << 'NMEOF' > /etc/NetworkManager/system-connections/gords.nmconnection
 [connection]
@@ -61,6 +60,9 @@ method=auto
 addr-gen-mode=default
 method=auto
 NMEOF
+echo "=========================================================="
+nmcli dev wifi connect {{wifi_ssid}} password {{wifi_password}} wep-key-type key
+echo "=========================================================="
 
 # Set correct permissions for NetworkManager connection file
 chmod 600 /etc/NetworkManager/system-connections/gords.nmconnection
