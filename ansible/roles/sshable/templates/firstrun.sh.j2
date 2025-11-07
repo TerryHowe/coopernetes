@@ -33,7 +33,8 @@ rm -f /etc/xdg/autostart/piwiz.desktop
 rm -f /etc/xdg/autostart/xdg-user-dirs.desktop
 
 # Enable wifi
-rfkill unblock wlan
+echo "=========================================================="
+rfkill unblock all
 nmcli radio wifi on
 # Create NetworkManager connection file
 cat << 'NMEOF' > /etc/NetworkManager/system-connections/gords.nmconnection
