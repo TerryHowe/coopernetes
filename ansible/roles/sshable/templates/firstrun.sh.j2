@@ -35,7 +35,40 @@ rm -f /etc/xdg/autostart/xdg-user-dirs.desktop
 # Enable wifi
 rfkill unblock wlan
 nmcli radio wifi on
-nmcli dev wifi connect {{wifi_ssid}} password {{wifi_password}} wep-key-type key
+echo nmcli dev wifi connect {{wifi_ssid}} password {{wifi_password}} wep-key-type key
+# Create NetworkManager connection file
+cat << 'NMEOF' > /etc/NetworkManager/system-connections/gords.nmconnection
+[connection]
+id=gords
+uuid=$(uuidgen)
+type=wifi
+autoconnect=true
+permissions=
+
+[wifi]
+mode=infrastructure
+ssid={{wifi_ssid}}
+
+[wifi-security]
+auth-alg=open
+key-mgmt=wpa-psk
+psk={{wifi_password}}
+
+[ipv4]
+method=auto
+
+[ipv6]
+addr-gen-mode=default
+method=auto
+NMEOF
+
+# Set correct permissions for NetworkManager connection file
+chmod 600 /etc/NetworkManager/system-connections/gords.nmconnection
+chown root:root /etc/NetworkManager/system-connections/gords.nmconnection
+
+# Reload NetworkManager to pick up the new connection
+nmcli connection reload
+
 
 # Generate locale
 echo 'en_US.UTF-8 UTF-8' >/etc/locale.gen
