@@ -97,13 +97,14 @@
   become: yes
   failed_when: false
 
-#- name: Set locale to en_US.UTF-8 to skip locale wizard
-#  lineinfile:
-#    path: '{{mount_point}}/rootfs/etc/default/locale'
-#    line: 'LANG=en_US.UTF-8'
-#    create: yes
-#  become: yes
-#  failed_when: false
+- name: Set locale to en_US.UTF-8 to skip locale wizard
+  copy:
+    content: |
+      LANG=en_US.UTF-8
+      LC_ALL=en_US.UTF-8
+    dest: '{{mount_point}}/rootfs/etc/default/locale'
+  become: yes
+  failed_when: false
 
 - name: Set keyboard layout to US to skip keyboard wizard
   copy:
