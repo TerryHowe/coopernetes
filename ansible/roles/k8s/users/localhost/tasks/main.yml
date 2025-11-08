@@ -28,12 +28,12 @@
       failed_when: False
       delegate_to: localhost
 
-    - name: Merge config files
-      command: bash -c "KUBECONFIG={{ lookup('env', 'HOME') }}/.kube/config:{{ lookup('env', 'HOME') }}/.kube/{{ hostname }} kubectl config view --flatten > {{ lookup('env', 'HOME') }}/.kube/newconfig"
+    - name: Rename context
+      command: kubectl config rename-context --kubeconfig "{{ lookup('env', 'HOME') }}/.kube/{{ hostname }}" "kubernetes-admin@kubernetes" "{{ hostname }}"
       delegate_to: localhost
 
-    - name: Rename context
-      command: kubectl config rename-context --kubeconfig "{{ lookup('env', 'HOME') }}/.kube/newconfig" "kubernetes-admin@{{ hostname }}" "{{ hostname }}"
+    - name: Merge config files
+      command: bash -c "KUBECONFIG={{ lookup('env', 'HOME') }}/.kube/config:{{ lookup('env', 'HOME') }}/.kube/{{ hostname }} kubectl config view --flatten > {{ lookup('env', 'HOME') }}/.kube/newconfig"
       delegate_to: localhost
 
     - name: Set host as current context
