@@ -10,11 +10,11 @@
     mode: '0644'
   become: yes
 
-- name: Copy WiFi credentials to boot partition
+- name: Create empty meta-data file
   ansible.builtin.file:
     path: '{{ boot_path }}/meta-data'
-    state: directory
-    mode: '0755'
+    state: touch
+    mode: '0644'
   become: yes
 
 - name: Check if pi user home directory exists (for older OS images)
