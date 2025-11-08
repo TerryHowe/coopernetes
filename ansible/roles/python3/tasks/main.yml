@@ -5,21 +5,10 @@
     state: latest
   become: True
 
-- name: apt-get install python3-pip
-  apt:
-    name: python3-pip
-    state: latest
-  become: True
-
 - name: Update python
   alternatives:
     name: python
     link: /usr/bin/python
     path: /usr/bin/python3
     priority: 2
-  become: True
-
-- name: Upgrade pip
-  pip:
-    name: pip
   become: True
