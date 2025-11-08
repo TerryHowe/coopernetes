@@ -17,8 +17,6 @@ fi
 rm -f /etc/xdg/autostart/piwiz.desktop
 rm -f /etc/xdg/autostart/xdg-user-dirs.desktop
 
-# Enable wifi
-echo "=========================================================="
 # Create NetworkManager connection file
 cat << 'NMEOF' > /etc/NetworkManager/system-connections/gords.nmconnection
 [connection]
