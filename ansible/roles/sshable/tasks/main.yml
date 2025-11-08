@@ -10,25 +10,12 @@
     mode: '0644'
   become: yes
 
-- name: Create empty meta-data file
-  ansible.builtin.file:
-    path: '{{ boot_path }}/meta-data'
-    state: touch
-    mode: '0644'
-  become: yes
-
-- name: Check if pi user home directory exists (for older OS images)
-  stat:
-    path: '{{mount_point}}/rootfs/home/billy'
-  register: pi_user_home
-
 - name: Create userconf.txt for automatic user creation (Bookworm+ only)
   copy:
     content: 'pi:{{ pi_user_password_hash }}'
     dest: '{{ boot_path }}/userconf.txt'
     mode: '0600'
   become: yes
-  when: not pi_user_home.stat.exists
 
 - name: Create pi home directory
   file:
@@ -47,7 +34,6 @@
     group: pi
     mode: '0700'
   become: yes
-  when: pi_user_home.stat.exists
 
 - name: Copy SSH public keys for older OS (if pi user already exists)
   authorized_key:
@@ -56,21 +42,11 @@
     user: pi
   become: yes
   loop: '{{ssh_public_keys}}'
-  when: pi_user_home.stat.exists
 
 - name: Create firstrun.sh script for SSH keys on newer OS (Bookworm+)
   template:
     src: firstrun.sh.j2
     dest: '{{ boot_path }}/firstrun.sh'
-    mode: '0755'
-  become: yes
-  when: not pi_user_home.stat.exists
-  register: firstrun_created
-
-- name: Create firstrun.sh copy
-  template:
-    src: firstrun.sh.j2
-    dest: '{{ mount_point }}/rootfs/home/pi/firstrun.sh'
     mode: '0755'
   become: yes
 
@@ -81,7 +57,6 @@
     regexp: '^(.*rootwait.*)$'
     line: '\1 cfg80211.ieee80211_regdom=US systemd.restore_state=0 rfkill.default_state=0 systemd.run=/boot/firstrun.sh systemd.run_success_action=reboot systemd.unit=kernel-command-line.target'
   become: yes
-  when: not pi_user_home.stat.exists and firstrun_created is changed
 
 - name: Disable setup wizard for desktop version
   file:
