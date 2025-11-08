@@ -13,21 +13,6 @@ else
     BOOT_DIR="/boot"
 fi
 
-# Create .ssh directory
-mkdir -p /home/pi/.ssh
-chmod 0700 /home/pi/.ssh
-
-# Add authorized keys
-cat << 'EOF' > /home/pi/.ssh/authorized_keys
-{% for key in ssh_public_keys %}
-{{ key }}
-{% endfor %}
-EOF
-
-# Set correct permissions
-chmod 0600 /home/pi/.ssh/authorized_keys
-chown -R pi:pi /home/pi/.ssh
-
 # Disable the setup wizard
 rm -f /etc/xdg/autostart/piwiz.desktop
 rm -f /etc/xdg/autostart/xdg-user-dirs.desktop

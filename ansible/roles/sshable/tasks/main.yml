@@ -3,14 +3,14 @@
   set_fact:
     boot_path: '{{mount_point}}/boot'
 
-- name: Enable SSH (creates empty ssh file in boot partition)
+- name: Enable SSH by creating empty ssh file in boot partition
   file:
     path: '{{ boot_path }}/ssh'
     state: touch
     mode: '0644'
   become: yes
 
-- name: Create userconf.txt for automatic user creation (Bookworm+ only)
+- name: Create userconf.txt for automatic user creation
   copy:
     content: 'pi:{{ pi_user_password_hash }}'
     dest: '{{ boot_path }}/userconf.txt'
@@ -26,7 +26,7 @@
     mode: '0700'
   become: yes
 
-- name: Create ssh directory for older OS (if pi user already exists)
+- name: Create pi ssh directory
   file:
     path: '{{mount_point}}/rootfs/home/pi/.ssh'
     state: directory
@@ -35,7 +35,7 @@
     mode: '0700'
   become: yes
 
-- name: Copy SSH public keys for older OS (if pi user already exists)
+- name: Copy SSH public keys
   authorized_key:
     key: '{{item}}'
     path: '{{mount_point}}/rootfs/home/pi/.ssh/authorized_keys'
@@ -43,7 +43,7 @@
   become: yes
   loop: '{{ssh_public_keys}}'
 
-- name: Create firstrun.sh script for SSH keys on newer OS (Bookworm+)
+- name: Create firstrun.sh script
   template:
     src: firstrun.sh.j2
     dest: '{{ boot_path }}/firstrun.sh'
