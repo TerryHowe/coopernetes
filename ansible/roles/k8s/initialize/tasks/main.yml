@@ -202,23 +202,6 @@
         creates: /etc/containerd/config.toml
       become: yes
 
-    - name: Configure containerd to use systemd cgroup driver
-      lineinfile:
-        path: /etc/containerd/config.toml
-        regexp: '^\s*SystemdCgroup\s*='
-        line: '            SystemdCgroup = true'
-        insertafter: '^\s*\[plugins\."io\.containerd\.grpc\.v1\.cri"\.containerd\.runtimes\.runc\.options\]'
-      become: yes
-      register: containerd_config
-
-    - name: Restart containerd if config changed
-      systemd:
-        name: containerd
-        state: restarted
-        enabled: yes
-      become: yes
-      when: containerd_config is changed
-
     - name: Ensure containerd is running
       systemd:
         name: containerd
@@ -226,6 +209,49 @@
         enabled: yes
       become: yes
   when: not crictl_executable.stat.exists
+
+- name: Check if containerd config exists
+  stat:
+    path: /etc/containerd/config.toml
+  register: containerd_config_file
+  become: yes
+
+- name: Enable CRI plugin in containerd
+  lineinfile:
+    path: /etc/containerd/config.toml
+    regexp: '^disabled_plugins\s*=\s*\["cri"\]'
+    line: '#disabled_plugins = ["cri"]'
+  become: yes
+  register: containerd_cri_enabled
+  when: containerd_config_file.stat.exists
+
+- name: Configure containerd to use systemd cgroup driver
+  lineinfile:
+    path: /etc/containerd/config.toml
+    regexp: '^\s*SystemdCgroup\s*='
+    line: '            SystemdCgroup = true'
+    insertafter: '^\s*\[plugins\."io\.containerd\.grpc\.v1\.cri"\.containerd\.runtimes\.runc\.options\]'
+  become: yes
+  register: containerd_cgroup_config
+  when: containerd_config_file.stat.exists
+
+- name: Restart containerd if config changed outside install block
+  systemd:
+    name: containerd
+    state: restarted
+    enabled: yes
+  become: yes
+  when: (containerd_cri_enabled is defined and containerd_cri_enabled is changed) or (containerd_cgroup_config is defined and containerd_cgroup_config is changed)
+
+- name: Configure crictl to use containerd
+  copy:
+    content: |
+      runtime-endpoint: unix:///run/containerd/containerd.sock
+      image-endpoint: unix:///run/containerd/containerd.sock
+      timeout: 10
+    dest: /etc/crictl.yaml
+    mode: '0644'
+  become: yes
 
 - name: Add root group to pi for containerd
   user:
