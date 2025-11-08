@@ -1,7 +1,7 @@
 [Unit]
 Description=Unblock all rfkill devices (WiFi, Bluetooth)
-Before=network-pre.target
-Wants=network-pre.target
+After=NetworkManager.service
+Wants=NetworkManager.service
 
 [Service]
 Type=oneshot
