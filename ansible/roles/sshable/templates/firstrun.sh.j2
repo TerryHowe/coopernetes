@@ -34,8 +34,6 @@ rm -f /etc/xdg/autostart/xdg-user-dirs.desktop
 
 # Enable wifi
 echo "=========================================================="
-rfkill unblock all
-nmcli radio wifi on
 # Create NetworkManager connection file
 cat << 'NMEOF' > /etc/NetworkManager/system-connections/gords.nmconnection
 [connection]
@@ -61,17 +59,10 @@ method=auto
 addr-gen-mode=default
 method=auto
 NMEOF
-echo "=========================================================="
-nmcli dev wifi connect {{wifi_ssid}} password {{wifi_password}} wep-key-type key
-echo "=========================================================="
 
 # Set correct permissions for NetworkManager connection file
 chmod 600 /etc/NetworkManager/system-connections/gords.nmconnection
 chown root:root /etc/NetworkManager/system-connections/gords.nmconnection
-
-# Reload NetworkManager to pick up the new connection
-nmcli connection reload
-
 
 # Generate locale
 echo 'en_US.UTF-8 UTF-8' >/etc/locale.gen
