@@ -4,7 +4,5 @@
   roles:
     - role: raspinit
     - role: python3
-    - role: locale
-    - role: keyboard
     - role: k8s/initialize
     - role: k8s/install

@@ -1,4 +1,8 @@
 ---
+
+Done in disk burn atm
+
+
 - name: Copy over keyboard
   copy:
     src: keyboard

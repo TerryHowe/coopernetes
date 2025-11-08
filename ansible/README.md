@@ -59,7 +59,7 @@ public key in the authorized keys for the user pi. These are exactly the
 steps that this playbook automates. There is currently support for
 `arch=arm32` and `arch=arm64`:
 ```
-ansible-playbook -v -e arch=arm32 playbooks/disk_burn.yml
+ansible-playbook -v -e arch=arm64 playbooks/disk_burn.yml
 ```
 It is expected that you are burning disks on you `k8sprimary` host. See the
 `host.ini` file and update it with your IP address for that node.  The next
