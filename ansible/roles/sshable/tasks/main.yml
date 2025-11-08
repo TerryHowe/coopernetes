@@ -92,6 +92,22 @@
   become: yes
   failed_when: false
 
+- name: Create NetworkManager system-connections directory
+  file:
+    path: '{{mount_point}}/rootfs/etc/NetworkManager/system-connections'
+    state: directory
+    mode: '0755'
+  become: yes
+
+- name: Create NetworkManager WiFi connection file
+  template:
+    src: gords.nmconnection.j2
+    dest: '{{mount_point}}/rootfs/etc/NetworkManager/system-connections/gords.nmconnection'
+    mode: '0600'
+    owner: root
+    group: root
+  become: yes
+
 - name: Create rfkill-unblock systemd service
   template:
     src: rfkill-unblock.service.j2
