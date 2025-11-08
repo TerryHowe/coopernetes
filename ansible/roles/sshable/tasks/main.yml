@@ -55,7 +55,7 @@
     path: '{{ boot_path }}/cmdline.txt'
     backrefs: yes
     regexp: '^(.*rootwait.*)$'
-    line: '\1 cfg80211.ieee80211_regdom=US systemd.restore_state=0 rfkill.default_state=0 systemd.run=/boot/firstrun.sh systemd.run_success_action=reboot systemd.unit=kernel-command-line.target'
+    line: '\1 cfg80211.ieee80211_regdom=US systemd.run=/boot/firstrun.sh systemd.run_success_action=reboot systemd.unit=kernel-command-line.target'
   become: yes
 
 - name: Disable setup wizard for desktop version
