@@ -73,6 +73,22 @@
       become: yes
       failed_when: False
 
+    - name: Stop and mask dev-zram0.swap (rpi-swap mechanism)
+      systemd:
+        name: dev-zram0.swap
+        state: stopped
+        enabled: no
+        masked: yes
+      become: yes
+      failed_when: False
+
+    - name: Disable rpi-swap by renaming config file
+      command: mv /etc/rpi/swap.conf /etc/rpi/swap.conf.disabled
+      args:
+        removes: /etc/rpi/swap.conf
+      become: yes
+      failed_when: False
+
     - name: Remove common swap files
       file:
         path: "{{ item }}"
