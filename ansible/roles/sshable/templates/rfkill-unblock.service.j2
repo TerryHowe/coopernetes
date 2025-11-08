@@ -6,6 +6,8 @@ Wants=NetworkManager.service
 [Service]
 Type=oneshot
 ExecStart=/usr/sbin/rfkill unblock all
+ExecStart=/usr/bin/nmcli radio wifi on
+ExecStart=/usr/bin/nmcli connection reload
 RemainAfterExit=yes
 
 [Install]
