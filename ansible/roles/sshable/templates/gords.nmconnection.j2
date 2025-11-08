@@ -9,10 +9,17 @@ permissions=
 mode=infrastructure
 ssid={{wifi_ssid}}
 
-[wifi-security]
+[802-11-wireless]
+band=bg
+powersave=0
+
+[802-11-wireless-security]
 auth-alg=open
 key-mgmt=wpa-psk
 psk={{wifi_password}}
+
+[regulatory]
+country=US
 
 [ipv4]
 method=auto
