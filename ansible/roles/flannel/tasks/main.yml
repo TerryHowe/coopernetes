@@ -1,17 +1,53 @@
 ---
-- name: Check for daemonset
-  command: kubectl get daemonset --namespace kube-system kube-flannel-ds
+- name: Check for CNI plugins directory
+  stat:
+    path: /opt/cni/bin
+  register: cni_bin_dir
+  become: yes
+
+- name: Install CNI plugins
+  block:
+    - name: Create CNI bin directory
+      file:
+        path: /opt/cni/bin
+        state: directory
+        mode: '0755'
+      become: yes
+
+    - name: Download CNI plugins
+      get_url:
+        url: https://github.com/containernetworking/plugins/releases/download/v1.6.1/cni-plugins-linux-arm64-v1.6.1.tgz
+        dest: /tmp/cni-plugins.tgz
+        mode: '0644'
+      become: yes
+
+    - name: Extract CNI plugins
+      unarchive:
+        src: /tmp/cni-plugins.tgz
+        dest: /opt/cni/bin
+        remote_src: yes
+      become: yes
+
+    - name: Remove CNI plugins archive
+      file:
+        path: /tmp/cni-plugins.tgz
+        state: absent
+      become: yes
+  when: not cni_bin_dir.stat.exists
+
+- name: Check for flannel daemonset
+  command: kubectl get daemonset --namespace kube-flannel kube-flannel-ds
   failed_when: False
   changed_when: False
   register: daemonset
 
-- name: Start the daemonset
+- name: Deploy flannel
   block:
-    - name: Copy over the kube config
+    - name: Copy over the kube-flannel config
       copy:
         src: kube-flannel.yml
         dest: /home/pi/kube-flannel.yml
 
-    - name: Add daemonset
+    - name: Apply flannel daemonset
       command: kubectl apply -f kube-flannel.yml
   when: daemonset.rc != 0
