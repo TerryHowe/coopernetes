@@ -41,13 +41,6 @@
   changed_when: False
   register: daemonset
 
-- name: Deploy flannel
-  block:
-    - name: Copy over the kube-flannel config
-      copy:
-        src: kube-flannel.yml
-        dest: /home/pi/kube-flannel.yml
-
-    - name: Apply flannel daemonset
-      command: kubectl apply -f kube-flannel.yml
+- name: Apply flannel from GitHub releases
+  command: kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
   when: daemonset.rc != 0
