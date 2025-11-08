@@ -70,8 +70,8 @@ locale-gen
 localectl set-locale LANG=en_US.UTF-8
 
 # Remove this script so it doesn't run again
-rm -f ${BOOT_DIR}/firstrun.sh
 sed -i 's| systemd.run.*||g' ${BOOT_DIR}/cmdline.txt
+rm -f ${BOOT_DIR}/firstrun.sh
 
 set +x
 echo '====== STOP FIRST RUN ======'
