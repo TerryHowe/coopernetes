@@ -9,20 +9,9 @@
     file: ../../configuration/vars/main.yml
 
 - block:
-  - name: Create minimal kubeadm config for cluster name
-    copy:
-      content: |
-        apiVersion: kubeadm.k8s.io/v1beta3
-        kind: ClusterConfiguration
-        clusterName: {{ primary_hostname }}
-      dest: /tmp/kubeadm-cluster-name.yaml
-      mode: '0644'
-    become: yes
-
   - name: kubeadm init
     command: >
       kubeadm init
-      --config=/tmp/kubeadm-cluster-name.yaml
       --apiserver-advertise-address={{ groups.k8sprimary[0] }}
       --node-name={{ primary_hostname }}
       --pod-network-cidr=10.244.0.0/16
