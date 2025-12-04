@@ -151,6 +151,7 @@
           - ca-certificates
           - curl
           - gnupg
+          - open-iscsi
         state: present
         update_cache: yes
       become: yes
