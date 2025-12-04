@@ -3,7 +3,7 @@
   hosts: k8sprimary
   roles:
     #- role: k8s/primary
-    #- role: k8s/users/root
-    #- role: k8s/users/pi
-    #- role: k8s/users/localhost
-    - role: flannel
+    - role: k8s/users/root
+    - role: k8s/users/pi
+    - role: k8s/users/localhost
+    #- role: flannel

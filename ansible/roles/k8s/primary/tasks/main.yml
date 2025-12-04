@@ -15,7 +15,7 @@
       --apiserver-advertise-address={{ groups.k8sprimary[0] }}
       --node-name={{ primary_hostname }}
       --pod-network-cidr=10.244.0.0/16
-      --cri-socket=unix:/run/containerd/containerd.sock
+      --cri-socket=unix:///run/containerd/containerd.sock
       --token={{ bootstrap_token }}
       --token-ttl=24h
     become: yes
